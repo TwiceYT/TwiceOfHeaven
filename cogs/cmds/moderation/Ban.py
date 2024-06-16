@@ -6,7 +6,7 @@ from datetime import datetime
 
 intents = nextcord.Intents.all()
 
-database = sqlite3.connect('tog.db')
+database = sqlite3.connect('toh.db')
 cursor = database.cursor()
 
 

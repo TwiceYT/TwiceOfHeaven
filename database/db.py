@@ -53,5 +53,7 @@ def setup():
             prefix TEXT
         )
     """)
+    
     db.commit()
+    
 
