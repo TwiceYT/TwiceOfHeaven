@@ -52,14 +52,15 @@ class Setup(commands.Cog):
                 await i.response.send_message(f"Selected leave channel: {self.data['leave_channel_id']}", ephemeral=True)
             
             @nextcord.ui.select(
-                placeholder="Select modlogs channel...",
+                placeholder="Select welcome role...",
                 min_values=1,
                 max_values=1,
-                options=channels
+                options=roles
             )
-            async def select_modlogs(self, select: nextcord.ui.Select, i: nextcord.Interaction):
-                self.data['modlogs'] = int(select.values[0])
-                await i.response.send_message(f"Selected modlogs channel: {self.data['modlogs']}", ephemeral=True)
+            async def select_join_role_id(self, select: nextcord.ui.Select, i: nextcord.Interaction):
+                self.data['join_role_id'] = int(select.values[0])
+                await i.response.send_message(f"Selected leave channel: {self.data['join_role_id']}", ephemeral=True)            
+
 
             @nextcord.ui.button(label="Next", style=nextcord.ButtonStyle.green)
             async def next(self, button: nextcord.ui.Button, i: nextcord.Interaction):
@@ -89,8 +90,8 @@ class Setup(commands.Cog):
                 options=voice_channels
             )
             async def select_member_count(self, select: nextcord.ui.Select, i: nextcord.Interaction):
-                self.data['membercoun_tchannel'] = int(select.values[0])
-                await i.response.send_message(f"Selected member count channel: {self.data['membercoun_tchannel']}", ephemeral=True)
+                self.data['membercount_channel'] = int(select.values[0])
+                await i.response.send_message(f"Selected member count channel: {self.data['membercount_channel']}", ephemeral=True)
 
             @nextcord.ui.select(
                 placeholder="Select unverified channel...",
@@ -166,6 +167,15 @@ class Setup(commands.Cog):
                 self.data['birthday_channel_id'] = int(select.values[0])
                 await i.response.send_message(f"Selected birthday channel: {self.data['birthday_channel_id']}", ephemeral=True)
 
+            @nextcord.ui.select(
+                placeholder="Select modlogs channel...",
+                min_values=1,
+                max_values=1,
+                options=channels
+            )
+            async def select_modlogs(self, select: nextcord.ui.Select, i: nextcord.Interaction):
+                self.data['modlogs'] = int(select.values[0])
+                await i.response.send_message(f"Selected modlogs channel: {self.data['modlogs']}", ephemeral=True)
 
             @nextcord.ui.button(label="Next", style=nextcord.ButtonStyle.green)
             async def next(self, button: nextcord.ui.Button, i: nextcord.Interaction):
@@ -211,17 +221,18 @@ class Setup(commands.Cog):
                 guild = i.guild
                 cursor.execute("""
                     INSERT INTO guildinfo (
-                        guild_id, guild_name, modlogs, welcome_channel_id, leave_channel_id, 
-                        membercoun_tchannel, rolecount_channel, unverified_channel, staffrole_id, 
+                        guild_id, guild_name, modlogs, welcome_channel_id, join_role_id, leave_channel_id, 
+                        membercount_channel, rolecount_channel, unverified_channel, staffrole_id, 
                         ticketsupport_role_id, birthday_channel_id, verify_role, ticketlogs, serverlogs, 
                         supportcategory
-                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                     ON CONFLICT(guild_id) DO UPDATE SET
                         guild_name=excluded.guild_name,
                         modlogs=excluded.modlogs,
                         welcome_channel_id=excluded.welcome_channel_id,
+                        join_role_id=excluded.join_role_id,
                         leave_channel_id=excluded.leave_channel_id,
-                        membercoun_tchannel=excluded.membercoun_tchannel,
+                        membercount_channel=excluded.membercount_channel,
                         rolecount_channel=excluded.rolecount_channel,
                         unverified_channel=excluded.unverified_channel,
                         staffrole_id=excluded.staffrole_id,
@@ -232,8 +243,8 @@ class Setup(commands.Cog):
                         serverlogs=excluded.serverlogs,
                         supportcategory=excluded.supportcategory
                 """, (
-                    guild.id, guild.name, self.data.get('modlogs'), self.data.get('welcome_channel_id'), self.data.get('leave_channel_id'),
-                    self.data.get('membercoun_tchannel'), self.data.get('rolecount_channel'), self.data.get('unverified_channel'),
+                    guild.id, guild.name, self.data.get('modlogs'), self.data.get('welcome_channel_id'), self.data.get('join_role_id'), self.data.get('leave_channel_id'),
+                    self.data.get('membercount_channel'), self.data.get('rolecount_channel'), self.data.get('unverified_channel'),
                     self.data.get('staffrole_id'), self.data.get('ticketsupport_role_id'), self.data.get('birthday_channel_id'), self.data.get('verify_role'),
                     self.data.get('ticketlogs'), self.data.get('serverlogs'), self.data.get('supportcategory')
                 ))
@@ -241,7 +252,7 @@ class Setup(commands.Cog):
                 await i.response.send_message("Setup complete! Your channels will now be active with logs, redo the setup command if you want to change channels!", ephemeral=True)
 
         view = SetupViewStep1()
-        await i.response.send_message(f"Note that some channels might be irrelevant for you, then keep the options blank.\n\n" f"Please select the channels and roles for setup:", view=view, ephemeral=True)
+        await i.response.send_message(f"Note that some channels might be irrelevant for you, then keep the options blank.\n" f"Do '/setup_help' if you need guidance about the setup\n\n" f"Please select the channels and roles for setup:", view=view, ephemeral=True)
 
 
 def setup(bot: commands.Bot):
