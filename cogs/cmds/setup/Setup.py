@@ -238,10 +238,10 @@ class Setup(commands.Cog):
                     self.data.get('ticketlogs'), self.data.get('serverlogs'), self.data.get('supportcategory')
                 ))
                 database.commit()
-                await i.response.send_message("Setup complete!", ephemeral=True)
+                await i.response.send_message("Setup complete! Your channels will now be active with logs, redo the setup command if you want to change channels!", ephemeral=True)
 
         view = SetupViewStep1()
-        await i.response.send_message("Please select the channels and roles for setup:", view=view, ephemeral=True)
+        await i.response.send_message(f"Note that some channels might be irrelevant for you, then keep the options blank.\n\n" f"Please select the channels and roles for setup:", view=view, ephemeral=True)
 
 
 def setup(bot: commands.Bot):
