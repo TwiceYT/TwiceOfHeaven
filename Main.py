@@ -35,8 +35,6 @@ for folder in os.listdir("cogs"):
                         except Exception as e:
                             print(f"Failed to load extension {extension_name}:")
                             traceback.print_exc()
-
-
 #
 #
 #

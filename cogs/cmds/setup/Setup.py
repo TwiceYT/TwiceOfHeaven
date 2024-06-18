@@ -8,9 +8,6 @@ intents = nextcord.Intents.all()
 database = sqlite3.connect('toh.db')
 cursor = database.cursor()
 
-database = sqlite3.connect('guilds.db')
-cur = database.cursor()
-
 
 class Setup(commands.Cog):
     def __init__(self, bot: commands.Bot):
