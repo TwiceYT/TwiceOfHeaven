@@ -25,9 +25,9 @@ class Ban(commands.Cog):
             await member.ban(reason=reason)
 
             cursor.execute("""
-                INSERT INTO bans (banned_user, ban_reason, banned_by, ban_timestamp, user_id, bannedby_id)
-                VALUES (?, ?, ?, ?, ?, ?)
-            """, (member.name, reason, i.user.name, datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S'), member.id, i.user.id))
+                INSERT INTO bans (serverid, banned_user, ban_reason, banned_by, ban_timestamp, user_id, bannedby_id)
+                VALUES (?, ?, ?, ?, ?, ?, ?)
+            """, (i.guild_id, member.name, reason, i.user.name, datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S'), member.id, i.user.id))
             database.commit()
 
             await i.response.send_message(f"{member.mention} has been banned successfully!", ephemeral=True)

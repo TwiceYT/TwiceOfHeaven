@@ -210,7 +210,7 @@ class Setup(commands.Cog):
                 placeholder="Select support category...",
                 min_values=1,
                 max_values=1,
-                options=categories  # Changed to categories instead of channels
+                options=categories  
             )
             async def select_support_category(self, select: nextcord.ui.Select, i: nextcord.Interaction):
                 self.data['supportcategory'] = int(select.values[0])
