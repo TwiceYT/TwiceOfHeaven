@@ -15,7 +15,7 @@ def get_banlog_channel(i: nextcord.Interaction):
     if kicklog:
         return kicklog[0]
     else:
-        i.response.send_message("You will have setup your own banlogs", ephemeral=True)
+        i.response.send_message("You will have setup your own kick logs by using /setup", ephemeral=True)
         return None
     
 
