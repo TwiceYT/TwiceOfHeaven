@@ -39,7 +39,7 @@ def setup():
 
         db_cursor.execute("""
             CREATE TABLE IF NOT EXISTS bans (
-                serverid INTEGER,
+                guild_id INTEGER,
                 banned_user TEXT,
                 ban_reason TEXT,
                 banned_by TEXT,
