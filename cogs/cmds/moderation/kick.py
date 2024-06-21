@@ -9,13 +9,13 @@ database = sqlite3.connect('toh.db')
 cursor = database.cursor()
 
 
-def get_banlog_channel(i: nextcord.Interaction):
+def get_kicklog_channel(i: nextcord.Interaction):
     cursor.execute('SELECT modlogs FROM guildinfo WHERE guild_id = ?', (i.guild.id,))
     kicklog = cursor.fetchone()
     if kicklog:
         return kicklog[0]
     else:
-        i.response.send_message("You will have setup your own kick logs by using /setup", ephemeral=True)
+        i.response.send_message("You will have setup your own  modlogs by using /setup", ephemeral=True)
         return None
     
 
@@ -34,7 +34,7 @@ class kick(commands.Cog):
         await member.kick(reason=reason)
         await i.response.send_message(f"User {member.mention} got kicked successfully!", ephemeral=True)
 
-        kicklog = get_banlog_channel(i)
+        kicklog = get_kicklog_channel(i)
         if kicklog is None:
             return  
         print(kicklog)

@@ -16,7 +16,7 @@ def get_banlog_channel(i: nextcord.Interaction):
     if banlog:
         return banlog[0]
     else:
-        i.response.send_message("You will have setup your own banlogs by using /setup", ephemeral=True)
+        i.response.send_message("You will have setup your own modlogs by using /setup", ephemeral=True)
         return None
     
 

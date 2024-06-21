@@ -15,7 +15,7 @@ class Setup(commands.Cog):
     @nextcord.slash_command(
         name="setup",
         description="Setup the bot",
-        guild_ids=[api.GuildID]  # Replace with your guild ID
+        guild_ids=[api.GuildID]
     )
     async def setup(self, i: nextcord.Interaction):
         guild = i.guild
