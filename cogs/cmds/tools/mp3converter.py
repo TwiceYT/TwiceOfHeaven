@@ -20,18 +20,18 @@ class Mp3Conv(commands.Cog):
         self.bot = bot
 
     @nextcord.slash_command(
-        name="yt_mp3",
+        name="mp3conv",
         description="Convert any YouTube link to an MP3 file",
         guild_ids=[api.GuildID]
     )
-    async def convert(self, interaction: nextcord.Interaction, url: str):
-        await interaction.response.send_message("Starting download...", ephemeral=True)
+    async def convert(self, i: nextcord.Interaction, url: str):
+        await i.response.send_message("Starting download...", ephemeral=True)
         try:
             # Download YouTube video as audio
             yt = pytube.YouTube(url)
             video = yt.streams.filter(only_audio=True).first()
             if not video:
-                await interaction.followup.send("No audio streams available for this video.")
+                await i.followup.send("No audio streams available for this video.")
                 return
 
             output_path = video.download()
@@ -43,12 +43,12 @@ class Mp3Conv(commands.Cog):
             audio.export(mp3_path, format="mp3")
 
             if os.path.exists(mp3_path):
-                await interaction.followup.send("Download complete. Uploading MP3 file!", ephemeral=True)
-                await interaction.followup.send("Here is your downloaded Mp3!", file=nextcord.File(mp3_path))
+                await i.followup.send("Download complete. Uploading MP3 file!", ephemeral=True)
+                await i.followup.send("Here is your downloaded Mp3!", file=nextcord.File(mp3_path))
             else:
-                await interaction.followup.send("An error occurred: MP3 file not found.")
+                await i.followup.send("An error occurred: MP3 file not found.")
         except Exception as e:
-            await interaction.followup.send(f"An error occurred: {e}")
+            await i.followup.send(f"An error occurred: {e}")
         finally:
             # Clean up files
             if os.path.exists(output_path):
