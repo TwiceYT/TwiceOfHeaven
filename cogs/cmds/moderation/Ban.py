@@ -83,7 +83,7 @@ class Ban(commands.Cog):
             print(f"Message sent to ban log channel: {channel.name}")
         except Exception as e:
             print(f"Failed to send message to ban log channel: {e}")
-    #            
+                
 
 
 
