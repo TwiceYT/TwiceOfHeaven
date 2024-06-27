@@ -18,7 +18,7 @@ class TriviaButton(nextcord.ui.Button):
         super().__init__(label=label, style=style)
         self.callback = callback
 
-    async def callback(self, interaction):
+    async def callback(self, interaction: nextcord.Interaction):
         await self.callback(interaction)
 
 class Trivia(commands.Cog):
@@ -125,9 +125,9 @@ class Trivia(commands.Cog):
 
         self.current_user = None  # Reset the current user
 
-    async def continue_trivia(self, interaction):
+    async def continue_trivia(self, interaction: nextcord.Interaction):
         await self.trivia(interaction)  # Restart the trivia command
 
 def setup(bot: commands.Bot):
     print("Trivia Cog Registered")
-    bot.add_cog(Trivia(bot))
+    #bot.add_cog(Trivia(bot))
