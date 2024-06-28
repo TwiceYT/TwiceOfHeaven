@@ -86,6 +86,7 @@ class Birthday(commands.Cog):
         print("Sending birthday messages...")
         for guild in self.bot.guilds:
             await self.send_birthday_messages(guild)
+            print("Birthday message sent!")
 
     @check_birthday_task.before_loop
     async def before_check_birthday_task(self):
