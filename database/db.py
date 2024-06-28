@@ -107,8 +107,7 @@ def setup():
             user_id INTEGER,
             user TEXT,
             trivia_wins INTEGER,
-            guessnr_wins INTEGER,
-            pvp_wins INTEGER
+            guessnr_wins INTEGER
         )
         """)
 
