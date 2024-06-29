@@ -3,6 +3,7 @@ from nextcord.ext import commands
 import os
 import traceback
 from database.db import setup
+from dotenv import load_dotenv, dotenv_values
 
 # Initialize bot with intents and prefix
 intents = nextcord.Intents.all()
@@ -46,27 +47,8 @@ for folder in os.listdir("cogs"):
                             print(f"Failed to load extension {extension_name}:")
                             traceback.print_exc()
 
-# Function to get the bot token from the database
-def get_bot_token():
-    try:
-        if not hasattr(bot, 'db_cursor') or bot.db_cursor is None:
-            raise Exception("Database cursor is None")
-        
-        bot.db_cursor.execute('SELECT token FROM config')
-        result = bot.db_cursor.fetchone()
-        if result:
-            return result[0]
-        else:
-            raise Exception("Bot token not found in the database")
-    except Exception as e:
-        print("Failed to get the bot token:", e)
-        return None
+load_dotenv(dotenv_path='config.env')
+Token = os.getenv("BOTTOKEN")
+if Token:
+    bot.run(Token)
 
-# Get the bot token from the database
-token = get_bot_token()
-
-if token:
-    # Run the bot
-    bot.run(token)
-else:
-    print("Bot token is missing. Cannot start the bot.")
