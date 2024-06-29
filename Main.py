@@ -5,9 +5,15 @@ import traceback
 from database.db import setup
 from dotenv import load_dotenv, dotenv_values
 
+#Load env file
+load_dotenv(dotenv_path='config.env')
+
+#Load custom Prefix
+Prefix = os.getenv("Prefix")
+
 # Initialize bot with intents and prefix
 intents = nextcord.Intents.all()
-bot = commands.Bot(command_prefix="!", intents=intents)
+bot = commands.Bot(command_prefix=Prefix, intents=intents)
 
 # Set up database connection
 db_connection, db_cursor = setup()
@@ -31,6 +37,7 @@ async def on_ready():
     print(f"Logged in as {bot.user.name}")
     print("------------")
 
+
 # Load extensions (cogs) from directories
 for folder in os.listdir("cogs"):
     folder_path = os.path.join("cogs", folder)
@@ -47,7 +54,7 @@ for folder in os.listdir("cogs"):
                             print(f"Failed to load extension {extension_name}:")
                             traceback.print_exc()
 
-load_dotenv(dotenv_path='config.env')
+#Retrieve the Bot Token from 
 Token = os.getenv("BOTTOKEN")
 if Token:
     bot.run(Token)
