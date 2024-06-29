@@ -6,7 +6,7 @@ from database.db import setup
 from dotenv import load_dotenv, dotenv_values
 
 #Load env file
-load_dotenv(dotenv_path='config.env')
+load_dotenv(dotenv_path='config\config.env')
 
 #Load custom Prefix
 Prefix = os.getenv("Prefix")

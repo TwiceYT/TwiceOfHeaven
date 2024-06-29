@@ -84,7 +84,7 @@ class PvP(commands.Cog):
 
         if attacker and target_player:
             if not self.can_attack(i.user.id):
-                await i.response.send_message("You must wait before attacking again.")
+                await i.response.send_message("You must wait before attacking again.", ephemeral=True)
                 return
 
             damage = random.randint(5, 60)
@@ -112,7 +112,7 @@ class PvP(commands.Cog):
                 else:
                     wins = result[2] if result[2] is not None else 0
                     wins += 1
-                    cursor.execute("UPDATE minigames SET pvp_wins = ? WHERE user_id = ? AND guild_id = ?", (wins, i.user.id, i.guild_id, i.guild_id,))
+                    cursor.execute("UPDATE minigames SET pvp_wins = ? WHERE user_id = ? AND guild_id = ?", (wins, i.user.id, i.guild_id,))
                     database.commit()
 
                 result = f'{target_player.user.name} has been defeated and is out of the game!'
