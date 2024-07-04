@@ -2,18 +2,20 @@ import nextcord
 from nextcord.ext import commands
 import sqlite3
 from datetime import datetime
-
-intents = nextcord.Intents.all()
+import os
+from dotenv import load_dotenv, dotenv_values
 
 # Database file
-DATABASE_FILE = 'toh.db'
+load_dotenv(dotenv_path='config\config.env')
+DBFile = os.getenv("ATABASE_FILE")
 
 # Initialize the bot
+intents = nextcord.Intents.all()
 bot = commands.Bot(command_prefix="!", intents=intents)
 
 # Function to create or update a guild entry in the database
 def create_or_update_guild_entry(guild_id, guild_name, join_date):
-    with sqlite3.connect(DATABASE_FILE) as db:
+    with sqlite3.connect(DBFile) as db:
         cursor = db.cursor()
         # Insert or update the guild entry
         cursor.execute('''

@@ -1,8 +1,8 @@
 import nextcord
 from nextcord.ext import commands
-import os
 import traceback
 from database.db import setup
+import os
 from dotenv import load_dotenv, dotenv_values
 
 #Load env file

@@ -2,6 +2,7 @@ import nextcord
 from nextcord.ext import commands, application_checks
 import webcolors
 import api
+
 class CustomEmbed(commands.Cog):
     def __init__(self, bot):
         self.bot = bot

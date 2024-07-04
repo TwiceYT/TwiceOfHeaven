@@ -6,12 +6,21 @@ import random
 import asyncio
 import sqlite3
 import api
+import os
+from dotenv import load_dotenv, dotenv_values
+
+# Database file
+load_dotenv(dotenv_path='config\config.env')
+DBFile = os.getenv("DATABASE_FILE")
+database = sqlite3.connect(DBFile)
+cursor = database.cursor()
+
+
+
 
 intents = nextcord.Intents.default()
 intents.members = True
 
-database = sqlite3.connect('toh.db')
-cursor = database.cursor()
 
 class TriviaButton(nextcord.ui.Button):
     def __init__(self, label, style, callback):

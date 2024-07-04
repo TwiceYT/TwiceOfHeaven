@@ -3,11 +3,17 @@ from nextcord.ext import commands, application_checks
 import api
 import sqlite3
 import os
+import os
+from dotenv import load_dotenv, dotenv_values
+
+# Database file
+load_dotenv(dotenv_path='config\config.env')
+DBFile = os.getenv("DATABASE_FILE")
 
 intents = nextcord.Intents.all()
 
 def get_purgelog_channel(i: nextcord.Interaction):
-    with sqlite3.connect('toh.db') as database:
+    with sqlite3.connect(DBFile) as database:
         cursor = database.cursor()
         cursor.execute('SELECT modlogs FROM guildinfo WHERE guild_id = ?', (i.guild.id,))
         purgelog = cursor.fetchone()

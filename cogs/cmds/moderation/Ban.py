@@ -3,12 +3,18 @@ from nextcord.ext import commands, application_checks
 import api
 import sqlite3
 from datetime import datetime
+import os
+from dotenv import load_dotenv, dotenv_values
 
-intents = nextcord.Intents.all()
-
-database = sqlite3.connect('toh.db')
+# Database file
+load_dotenv(dotenv_path='config\config.env')
+DBFile = os.getenv("DATABASE_FILE")
+database = sqlite3.connect(DBFile)
 cursor = database.cursor()
 
+
+
+intents = nextcord.Intents.all()
 
 def get_banlog_channel(i: nextcord.Interaction):
     cursor.execute('SELECT modlogs FROM guildinfo WHERE guild_id = ?', (i.guild.id,))
