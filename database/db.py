@@ -30,12 +30,7 @@ def setup():
             )
         """)
 
-        cursor.execute("""
-            CREATE TABLE IF NOT EXISTS config (
-                token TEXT,
-                prefix TEXT
-            )
-        """)
+
 
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS bans (

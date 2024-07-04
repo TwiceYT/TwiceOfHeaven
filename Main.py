@@ -58,4 +58,3 @@ for folder in os.listdir("cogs"):
 Token = os.getenv("BOTTOKEN")
 if Token:
     bot.run(Token)
-
