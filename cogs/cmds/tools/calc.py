@@ -25,7 +25,7 @@ class Calc(commands.Cog):
 
     @nextcord.slash_command(
         name="calc",
-        description="Calculate your math with SelmerAI",
+        description="Calculate your math with TwiceOfHeaven",
         guild_ids=[api.GuildID]
     )
     async def calculations(self, ctx: nextcord.Interaction, expression: str):

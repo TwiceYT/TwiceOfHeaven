@@ -13,11 +13,7 @@ cursor = database.cursor()
 
 
 
-
 intents = nextcord.Intents.all()
-
-
-
 
 class Example(commands.Cog):
     def __init__(self, bot: commands.Bot):

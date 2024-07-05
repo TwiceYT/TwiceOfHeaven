@@ -15,6 +15,8 @@ DBFile = os.getenv("DATABASE_FILE")
 database = sqlite3.connect(DBFile)
 cursor = database.cursor()
 
+
+
 intents = nextcord.Intents.default()
 intents.members = True
 
