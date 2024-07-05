@@ -85,6 +85,16 @@ def setup():
         )
         """)
 
+        cursor.execute("""
+        CREATE TABLE IF NOT EXISTS messages (
+            message_id INTEGER PRIMARY KEY AUTOINCREMENT,
+            user_id INTEGER,
+            user TEXT,
+            timestamp DATETIME,
+            guild_id INTEGER
+        );
+        """)
+
         #Economy Database
         cursor.execute("""
         CREATE TABLE IF NOT EXISTS economy (
