@@ -1,3 +1,6 @@
 Serverchannel stats
 Support
 Logs
+On error
+Welcome/Leave
+Custom Selfroles feature
