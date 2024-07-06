@@ -1,4 +1,3 @@
-Serverchannel stats
 Support
 Logs
 On error
