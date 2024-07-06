@@ -1,5 +1,3 @@
-Stats
-Leaderboards
 Serverchannel stats
 Support
 Logs
