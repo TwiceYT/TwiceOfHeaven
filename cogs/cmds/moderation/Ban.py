@@ -31,7 +31,6 @@ class Ban(commands.Cog):
         self.bot = bot
 
 
-
 #
 ##
 ###
