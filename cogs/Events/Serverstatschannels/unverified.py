@@ -60,14 +60,13 @@ class Unverified(commands.Cog):
         voice_channel_id = get_unverified_channel(guild.id)
 
         if not target_role_id:
-            print(f"Error: Target role ID not found in guild '{guild.name}'")
+            #print(f"Error: Target role ID not found in guild '{guild.name}'")
             return
 
         target_role = guild.get_role(target_role_id)
 
         if not target_role:
-            print(f"Error: Target role not found in guild '{guild.name}'")
-            return
+            return None
 
         # Count members without the target role
         members_without_role = sum(1 for member in guild.members if target_role not in member.roles)
@@ -77,9 +76,6 @@ class Unverified(commands.Cog):
 
         if voice_channel and isinstance(voice_channel, nextcord.VoiceChannel):
             await voice_channel.edit(name=f'Unverified: {members_without_role}')
-            print(f'Updated voice channel name in guild "{guild.name}" to "Unverified: {members_without_role}"')
-        else:
-            print(f'Error: Voice Channel not found in guild "{guild.name}" or is not a VoiceChannel')
 
 def setup(bot: commands.Bot):
     bot.add_cog(Unverified(bot))
