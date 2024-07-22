@@ -25,6 +25,9 @@ else:
     print("Database connection failed. Cannot start the bot.")
     exit(1)  # Exit the script if database connection failed
 
+
+
+
 # Test command
 @bot.command()
 async def test(ctx):

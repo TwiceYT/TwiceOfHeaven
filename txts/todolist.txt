@@ -1,4 +1,3 @@
-On error
 Welcome/Leave
 Custom Selfroles feature
 Musicbot
