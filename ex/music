@@ -46,8 +46,10 @@ class Music(commands.Cog):
 
     @nextcord.slash_command(name="play", description="Play a song from YouTube.", guild_ids=[api.GuildID])
     async def play(self, interaction: nextcord.Interaction, url: str):
+        await interaction.response.defer()  # Acknowledge the interaction and defer the response
+
         if interaction.user.voice is None:
-            await interaction.response.send_message("You need to be in a voice channel to use this command.")
+            await interaction.followup.send("You need to be in a voice channel to use this command.")
             return
 
         if interaction.guild.voice_client is None:
@@ -71,25 +73,28 @@ class Music(commands.Cog):
             'no_color': True,
         }
 
-        with youtube_dl.YoutubeDL(ydl_opts) as ydl:
-            info = ydl.extract_info(url, download=False)
-            if 'entries' in info:
-                entry = info['entries'][0]
-            else:
-                entry = info
+        try:
+            with youtube_dl.YoutubeDL(ydl_opts) as ydl:
+                info = ydl.extract_info(url, download=False)
+                if 'entries' in info:
+                    entry = info['entries'][0]
+                else:
+                    entry = info
 
-            song = {
-                'url': entry['url'],
-                'title': entry['title'],
-                'requester': interaction.user
-            }
+                song = {
+                    'url': entry['url'],
+                    'title': entry['title'],
+                    'requester': interaction.user
+                }
 
-            music_queue.add_to_queue(interaction.guild.id, song)
+                music_queue.add_to_queue(interaction.guild.id, song)
 
-            if not self.is_playing:
-                await self.play_next(interaction)
+                if not self.is_playing:
+                    await self.play_next(interaction)
 
-            await interaction.response.send_message(f"Added to queue: {song['title']}")
+                await interaction.followup.send(f"Added to queue: {song['title']}")
+        except Exception as e:
+            await interaction.followup.send(f"An error occurred: {str(e)}")
 
     @nextcord.slash_command(name="skip", description="Skip the currently playing song.", guild_ids=[api.GuildID])
     async def skip(self, interaction: nextcord.Interaction):
@@ -141,11 +146,30 @@ class Music(commands.Cog):
                 nextcord.FFmpegPCMAudio(executable="ffmpeg", source=song['url'], **FFMPEG_OPTIONS),
                 after=lambda e: self.bot.loop.create_task(self.play_next(interaction))
             )
-            await interaction.response.send_message(f"Now playing: {song['title']}")
+            await interaction.followup.send(f"Now playing: {song['title']}")
         else:
             self.is_playing = False
             music_queue.clear_queue(interaction.guild.id)
-            await interaction.response.send_message("The queue is empty.")
+            await interaction.followup.send("The queue is empty.")
+
+    # Ensure action is defined with a default value before it's used.
+    async def log_voice_change(self, member, before, after):
+        action = "Unknown"  # Default value
+        if before.channel is None and after.channel is not None:
+            action = "Joined"
+        elif before.channel is not None and after.channel is None:
+            action = "Left"
+        elif before.channel is not None and after.channel is not None and before.channel != after.channel:
+            action = "Moved"
+
+        # Now action is guaranteed to have a value
+        embed = nextcord.Embed(
+            title=f"{action.capitalize()} Voice",
+            description=f"{member.display_name} {action.lower()} the voice channel.",
+            color=0x00ff00
+        )
+        await self.channel.send(embed=embed)
+
 
 def setup(bot: commands.Bot):
     print("Music Cog Registered")

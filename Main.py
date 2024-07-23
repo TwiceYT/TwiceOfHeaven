@@ -4,6 +4,7 @@ import traceback
 from database.db import setup
 import os
 from dotenv import load_dotenv, dotenv_values
+import api
 
 #Load env file
 load_dotenv(dotenv_path='config\config.env')
