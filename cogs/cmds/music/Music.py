@@ -8,6 +8,7 @@ class MusicQueue:
     def __init__(self):
         self.queues = {}
         self.current_songs = {}
+        self.volume = {}
 
     def get_queue(self, guild_id):
         if guild_id not in self.queues:
@@ -30,6 +31,12 @@ class MusicQueue:
         from random import shuffle
         queue = self.get_queue(guild_id)
         shuffle(queue)
+
+    def set_volume(self, guild_id, volume):
+        self.volume[guild_id] = volume
+
+    def get_volume(self, guild_id):
+        return self.volume.get(guild_id, 0.25)  # Default volume is 0.25 (25%)
 
 # Initialize the MusicQueue
 music_queue = MusicQueue()
@@ -142,7 +149,6 @@ class Music(commands.Cog):
         else:
             await interaction.response.send_message("The queue is currently empty.")
 
-
     @nextcord.slash_command(name="disconnect", description="Disconnects the bot and clears the current queue.")
     async def disconnect(self, interaction: nextcord.Interaction):
         if interaction.guild.voice_client:
@@ -163,9 +169,10 @@ class Music(commands.Cog):
             music_queue.set_current_song(interaction.guild.id, song)
             self.is_playing = True
 
+            volume = music_queue.get_volume(interaction.guild.id)
             FFMPEG_OPTIONS = {
                 'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5',
-                'options': '-vn -b:a 320k -ar 48000',
+                'options': f'-vn -b:a 320k -ar 48000 -af "volume={volume}"',
             }
 
             interaction.guild.voice_client.stop()
