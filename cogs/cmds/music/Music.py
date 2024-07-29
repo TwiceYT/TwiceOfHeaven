@@ -8,7 +8,6 @@ class MusicQueue:
     def __init__(self):
         self.queues = {}
         self.current_songs = {}
-        self.volume = {}
 
     def get_queue(self, guild_id):
         if guild_id not in self.queues:
@@ -31,12 +30,6 @@ class MusicQueue:
         from random import shuffle
         queue = self.get_queue(guild_id)
         shuffle(queue)
-
-    def set_volume(self, guild_id, volume):
-        self.volume[guild_id] = volume
-
-    def get_volume(self, guild_id):
-        return self.volume.get(guild_id, 0.25)  # Default volume is 0.25 (25%)
 
 # Initialize the MusicQueue
 music_queue = MusicQueue()
@@ -145,11 +138,12 @@ class Music(commands.Cog):
                 description=message,
                 color=nextcord.Color.gold()
             )
-            await interaction.response.send_message(embed=embed)
+            await self.safe_send_message(interaction, "", embed=embed)
         else:
-            await interaction.response.send_message("The queue is currently empty.")
+            await self.safe_send_message(interaction, "The queue is currently empty.")
 
-    @nextcord.slash_command(name="disconnect", description="Disconnects the bot and clears the current queue.")
+
+    @nextcord.slash_command(name="disconnect", description="Disconnects the bot and clears the current queue.", guild_ids=[api.GuildID])
     async def disconnect(self, interaction: nextcord.Interaction):
         if interaction.guild.voice_client:
             await interaction.guild.voice_client.disconnect()
@@ -161,7 +155,12 @@ class Music(commands.Cog):
     @nextcord.slash_command(name="clear", description="Clear the music queue.")
     async def clear(self, interaction: nextcord.Interaction):
         music_queue.clear_queue(interaction.guild.id)
-        await interaction.response.send_message("The queue has been cleared!")
+        await self.safe_send_message(interaction, "The queue has been cleared!")
+
+    @nextcord.slash_command(name="shuffle", description="Shuffle the music queue.", )
+    async def shuffle(self, interaction: nextcord.Interaction):
+        music_queue.shuffle_queue(interaction.guild.id)
+        await self.safe_send_message(interaction, "The queue has been shuffled!")
 
     async def play_next(self, interaction: nextcord.Interaction):
         if len(music_queue.get_queue(interaction.guild.id)) > 0:
@@ -169,10 +168,9 @@ class Music(commands.Cog):
             music_queue.set_current_song(interaction.guild.id, song)
             self.is_playing = True
 
-            volume = music_queue.get_volume(interaction.guild.id)
             FFMPEG_OPTIONS = {
                 'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5',
-                'options': f'-vn -b:a 320k -ar 48000 -af "volume={volume}"',
+                'options': '-vn -b:a 320k -ar 48000',
             }
 
             interaction.guild.voice_client.stop()
@@ -188,12 +186,19 @@ class Music(commands.Cog):
 
     async def safe_send_message(self, interaction: nextcord.Interaction, message: str, embed=None):
         try:
-            if interaction.response.is_done():
-                await interaction.followup.send(message, embed=embed)
+            if embed is None:
+                if interaction.response.is_done():
+                    await interaction.followup.send(message)
+                else:
+                    await interaction.response.send_message(message)
             else:
-                await interaction.response.send_message(message, embed=embed)
+                if interaction.response.is_done():
+                    await interaction.followup.send(message, embed=embed)
+                else:
+                    await interaction.response.send_message(message, embed=embed)
         except nextcord.errors.NotFound as e:
             print(f"Failed to send message: {e}")
+
 
 def setup(bot: commands.Bot):
     bot.add_cog(Music(bot))
