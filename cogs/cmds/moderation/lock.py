@@ -1,141 +1,191 @@
 import nextcord
-from nextcord.ext import commands
-import aiohttp
-import html
-import random
-import asyncio
-import sqlite3
+from nextcord.ext import commands, application_checks
 import api
-import os
-from dotenv import load_dotenv, dotenv_values
+import sqlite3
 
-# Database file
-load_dotenv(dotenv_path='config\config.env')
-DBFile = os.getenv("DATABASE_FILE")
-database = sqlite3.connect(DBFile)
-cursor = database.cursor()
+intents = nextcord.Intents.all()
 
+#Get the lockchannel from DB to be retreived to send out a message to logchannel
+def get_locklog_channel(i: nextcord.Interaction):
+    with sqlite3.connect('toh.db') as database:
+        cursor = database.cursor()
+        cursor.execute('SELECT modlogs FROM guildinfo WHERE guild_id = ?', (i.guild.id,))
+        locklog = cursor.fetchone()
+        if locklog:
+            return locklog[0]
+        else:
+            i.response.send_message("You need to set up your banlogs using /setup", ephemeral=True)
+            return None
 
+#Get the staffrole from DB to be retreived later in the command
+def get_staffrole(i: nextcord.Interaction):
+    with sqlite3.connect('toh.db') as database:
+        cursor = database.cursor()
+        cursor.execute('SELECT staffrole_id FROM guildinfo WHERE guild_id = ?', (i.guild.id,))
+        staffrole = cursor.fetchone()
+        if staffrole:
+            return staffrole[0]
+        else:
+            i.response.send_message("You need to set up your kick logs using /setup", ephemeral=True)
+            return None
 
-intents = nextcord.Intents.default()
-intents.members = True
+#Function check if staff or admin to set the permissions
+def is_staff_or_admin():
+    async def predicate(i: nextcord.Interaction):
+        #Checks if user has the administration perm
+        if i.user.guild_permissions.administrator:
+            return True
+        
 
+        #Check if user has the staffrole from DB
+        staff_role_id = get_staffrole(i)
+        if staff_role_id is None:
+            return False
+        
+        staff_role = i.guild.get_role(staff_role_id)
+        if staff_role in i.user.roles:
+            return True
+        
+        await i.response.send_message("You don't have permission to use this command.", ephemeral=True)
+        return False
+    
+    return application_checks.check(predicate)
+                                    
 
-class TriviaButton(nextcord.ui.Button):
-    def __init__(self, label, style, callback):
-        super().__init__(label=label, style=style)
-        self.callback = callback
-
-    async def callback(self, interaction):
-        await self.callback(interaction)
-
-class Trivia(commands.Cog):
+                            
+class Lock(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
-        self.correct_answer = None
-        self.correct_index = None
-        self.answer_given = False  # Flag to track if the correct answer has been given
-        self.current_user = None  # Track the user who initiated the trivia command
 
-    async def get_trivia_question(self):
-        url = "https://opentdb.com/api.php?amount=1&type=multiple"
-        async with aiohttp.ClientSession() as session:
-            async with session.get(url) as resp:
-                data = await resp.json()
-                question_data = data['results'][0]
-                self.correct_answer = html.unescape(question_data['correct_answer'])
-                incorrect_answers = [html.unescape(ans) for ans in question_data['incorrect_answers']]
-                answers = [self.correct_answer] + incorrect_answers
-                random.shuffle(answers)
-                self.correct_index = answers.index(self.correct_answer) + 1
-                return question_data, answers
+#
+##
+###
+#### Locked COMMAND
+###
+##
+#
 
+    @is_staff_or_admin()
     @nextcord.slash_command(
-        name="trivia",
-        description="Have fun with some Trivia!!",
+        name="lock",
+        description="Lock the channel",
         guild_ids=[api.GuildID]
     )
-    async def trivia(self, i: nextcord.Interaction):
-        self.answer_given = False  # Reset the flag for a new trivia question
-        self.current_user = i.user  # Set the current user who initiated the command
+    async def lock(self, i: nextcord.Interaction):
+        # Check if the command is used in a guild
+        if i.guild is None:
+            await i.response.send_message("This command can only be used in a server (guild).", ephemeral=True)
+            return
 
-        question_data, answers = await self.get_trivia_question()
 
-        question = html.unescape(question_data['question'])
+        # Check if the user has the necessary permissions
+        if not i.user.guild_permissions.manage_channels:
+            await i.response.send_message("You don't have permission to manage channels.", ephemeral=True)
+            return
 
-        options = ""
-        for idx, answer in enumerate(answers, start=1):
-            options += f"{idx}. {answer}\n"
+        # Get the current channel
+        channel = i.channel
 
-        await i.response.send_message(f"**Question:**\n{question}\n\n**Options:**\n{options}")
+        # Retrieve the staff role
+        staffrole = get_staffrole(i)
+        if staffrole is None:
+            return  
+        
+        # Ensure staffrole is a list
+        staff_role_ids = [staffrole]
 
-        try:
-            guess_message = await self.bot.wait_for(
-                "message",
-                timeout=30.0,
-                check=lambda m: m.author == i.user and m.channel == i.channel,
+        # Set permissions to deny everyone and allow the owner and staff roles
+        await channel.set_permissions(i.guild.default_role, read_messages=False)
+        await channel.set_permissions(i.guild.owner, read_messages=True, manage_channels=True)
+
+
+        for role in i.guild.roles:
+            if role.id in staff_role_ids:
+                await channel.set_permissions(role, read_messages=True, manage_channels=True)
+
+        await i.response.send_message(f"{channel.mention} has been locked. Only the owner and specified staff roles have full permissions.", ephemeral=True)
+
+
+        # Retrieve the locklog channel
+        locklog = get_locklog_channel(i)
+        if locklog is None:
+            return  
+
+        log_channel = i.guild.get_channel(locklog)
+        if log_channel:
+            LockLogEmbed = nextcord.Embed(
+                title="Channel Locked",
+                description=f"{channel.mention} has been locked.",
+                color=nextcord.Color.red()
             )
+            LockLogEmbed.set_footer(text=f"Locked by {i.user.name}", icon_url=i.user.avatar.url)
+            await log_channel.send(embed=LockLogEmbed)
 
-            choice = int(guess_message.content)
-            if 1 <= choice <= 4:
-                await self.check_answer(guess_message, choice)
-        except asyncio.TimeoutError:
-            if not self.answer_given:  # Check if the answer hasn't been given already
-                await i.followup.send("Time is up!")
+#
+##
+###
+#### Unlocked COMMAND
+###
+##
+#
 
-    async def check_answer(self, message, choice):
-        if self.answer_given:
-            return  # Prevent processing if the answer has already been given
+    @is_staff_or_admin()
+    @nextcord.slash_command(
+        name="unlock",
+        description="Unlock the channel",
+        guild_ids=[api.GuildID] 
+    )
+    async def unlock(self, i: nextcord.Interaction):
+        # Check if the command is used in a guild
+        if i.guild is None:
+            await i.response.send_message("This command can only be used in a server (guild).", ephemeral=True)
+            return
 
-        self.answer_given = True  # Set the flag to indicate that the correct answer has been given
 
-        if choice == self.correct_index:
-            cursor.execute("""
-                SELECT user_id, user, bank FROM economy WHERE user_id = ? AND guild_id = ?
-            """, (message.author.id, message.guild.id))
-            result = cursor.fetchone()
-            if result is None:
-                cursor.execute("""
-                    INSERT INTO economy(user_id, user, bank, guild_id) VALUES (?, ?, ?, ?)
-                """, (message.author.id, message.author.name, 50, message.guild.id))
-            else:
-                bank = result[2] + 50
-                cursor.execute("""
-                    UPDATE economy SET bank = ? WHERE user_id = ? AND guild_id = ?
-                """, (bank, message.author.id, message.guild.id))
-            database.commit()
+        # Check if the user has the necessary permissions
+        if not i.user.guild_permissions.manage_channels:
+            await i.response.send_message("You don't have permission to manage channels.", ephemeral=True)
+            return
 
-            cursor.execute("""
-                SELECT user_id, user, trivia_wins FROM minigames WHERE user_id = ? AND guild_id = ?
-            """, (message.author.id, message.guild.id))
-            result = cursor.fetchone()
-            if result is None:
-                cursor.execute("""
-                    INSERT INTO minigames(user_id, user, trivia_wins, guild_id) VALUES (?, ?, ?, ?)
-                """, (message.author.id, message.author.name, 1, message.guild.id))
-            else:
-                wins = result[2] if result[2] is not None else 0
-                wins += 1
-                cursor.execute("""
-                    UPDATE minigames SET trivia_wins = ? WHERE user_id = ? AND guild_id = ?
-                """, (wins, message.author.id, message.guild.id))
-            database.commit()
 
-            await message.channel.send(f"Correct answer, {message.author.mention}!")
-        else:
-            await message.channel.send(f"Wrong answer, {message.author.mention}. The correct answer was {self.correct_answer}.")
+        # Get the current channel
+        channel = i.channel
 
-        # Create and send a persistent "Continue" button
-        view = nextcord.ui.View()
-        continue_button = TriviaButton(label="Continue", style=nextcord.ButtonStyle.primary, callback=self.continue_trivia)
-        view.add_item(continue_button)
-        await message.channel.send("Would you like to continue?", view=view)
 
-        self.current_user = None  # Reset the current user
+        # Set permissions to deny everyone and allow the owner and staff roles
+        await channel.set_permissions(i.guild.default_role, read_messages=True)
+        await channel.set_permissions(i.guild.owner, read_messages=True, manage_channels=True)
+        await i.response.send_message(f"{channel.mention} has been unlocked. Everyone has now gotten their permissions to the channel!", ephemeral=True)
 
-    async def continue_trivia(self, interaction):
-        await self.trivia(interaction)  # Restart the trivia command
+
+        embed = nextcord.Embed(
+            title="Channel got unlocked",
+            description=f"{channel.mention} Has been unlocked. Now everyone have the permissions again!",
+        )
+        embed.set_footer(text=f"channel unlocked by {i.user.name}", icon_url=i.user.avatar.url)
+
+
+##Send out a log message
+
+        # Retrieve the locklog channel
+        locklog = get_locklog_channel(i)
+        if locklog is None:
+            return
+        print("Unlock", locklog)  
+
+        log_channel = i.guild.get_channel(locklog)
+        if log_channel:
+            print(f"{i.user.name} unlocked a channel")
+            LockLogEmbed = nextcord.Embed(
+                title="Channel Unlocked",
+                description=f"A channel got unlocked!",
+                color= nextcord.Color.green()
+            )
+            LockLogEmbed.set_footer(text=f"Unlocked by {i.user.name}", icon_url=i.user.avatar.url)
+            await log_channel.send(embed=LockLogEmbed)
+
+
+
 
 def setup(bot: commands.Bot):
-    print("Trivia Cog Registered")
-    bot.add_cog(Trivia(bot))
+    bot.add_cog(Lock(bot))

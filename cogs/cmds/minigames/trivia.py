@@ -17,7 +17,6 @@ cursor = database.cursor()
 
 
 
-
 intents = nextcord.Intents.default()
 intents.members = True
 

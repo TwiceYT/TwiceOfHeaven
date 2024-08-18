@@ -112,10 +112,16 @@ class HelpSetup(commands.Cog):
             inline=False
         )
         embed.add_field(
+            name="Information",
+            value="By not filling in anything in the boxes you are automatically setting it to none, this means that even if you do the setup again you can remove some of the setup by simply not filling the channels out again. Obs, if you run the setup command... Make sure to always fill all the channels again, or they will be set to none and not work as intended. By simply not filling it out, you can ignore those functions you dont wish to have.",
+            inline=False
+        )
+        embed.add_field(
             name="Questions regarding the bot?",
             value="If you by any chance would have any questions regarding this bot, feel free to message the creator! Discord: twiceee",
             inline=False
         )
+
 
         await i.response.send_message(embed=embed)
 

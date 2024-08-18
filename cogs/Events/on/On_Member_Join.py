@@ -1,47 +1,54 @@
 import nextcord
 from nextcord.ext import commands
 import api as api
+from datetime import datetime
 import random
+import sqlite3
+import os
+from dotenv import load_dotenv, dotenv_values
 
-intents = nextcord.Intents.all()
+# Database file
+load_dotenv(dotenv_path='config\config.env')
+DBFile = os.getenv("DATABASE_FILE")
+database = sqlite3.connect(DBFile)
+cursor = database.cursor()
+
+
+def get_welcome_channel(i: nextcord.Interaction):
+    cursor.execute('SELECT welcome_channel_id FROM guildinfo WHERE guild_id = ?', (i.guild.id,))
+    welcome = cursor.fetchone()
+    if welcome:
+        return welcome[0]
+    else:
+        i.response.send_message("You will have setup your own welcome channel by using /setup", ephemeral=True)
+        return None
+
 
 class MemberJoin(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
 
     @commands.Cog.listener()
-    async def on_member_join(self, member):
+    async def on_member_join(self, member, i: nextcord.Interaction):
         # Perform actions when a member joins
         # For example, send a welcome message as an embed to a specific channel
-        welcome_channel_id = api.WelcomeID  # Replace with your welcome channel ID
-        welcome_channel = member.guild.get_channel(welcome_channel_id)
-        rules_channel_mention = f"<#{api.Rules}>"
+        welcome = get_welcome_channel(i)
+        if welcome is None:
+            return  
+        print(welcome)
 
-        if welcome_channel:
+        channel = i.guild.get_channel(welcome)
+        if channel:
             # Create an embed for the welcome message
             embed = nextcord.Embed(
                 title=f"Welcome to the server, {member.name}!",
                 description=f"We're glad to have you here. Enjoy your stay!",
                 color=0x00ff00
             )
-            embed.add_field(name="Rules", value=f"Be sure to read the {rules_channel_mention}.")
-            embed.add_field(name="Mention", inline=False, value=f"{member.mention}")
             embed.set_thumbnail(url=member.avatar.url)  # Display member's avatar
+            embed.set_footer(icon_url=i.user.avatar, text=f"{datetime.now}")
 
-            # Randomize the role a member gets, a team between A - F, Used for initiate managers
-            preset_roles = [api.TeamA, api.TeamB, api.TeamC, api.TeamD, api.TeamE, api.TeamF]
-            random.shuffle(preset_roles)
-            
-            # Assign only one random role to the new member
-            role_to_assign = random.choice(preset_roles)
-            role = member.guild.get_role(role_to_assign)
-            
-            if role:
-                await member.add_roles(role)
-                embed.add_field(name="Assigned Team", value=f"{role.mention}")
-
-            # Send the welcome message as an embed
-            await welcome_channel.send(embed=embed)
+            await channel.send(embed=embed)
 
 def setup(bot: commands.Bot):
     print("MemberJoin Cog Registered")
