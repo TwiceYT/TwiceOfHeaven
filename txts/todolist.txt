@@ -1,1 +1,2 @@
 Custom Selfroles feature
+Bug report

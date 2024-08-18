@@ -143,7 +143,7 @@ class Support(commands.Cog):
         
         if STAFF_ROLE_ID in user_roles or TICKET_SUPPORT_ID in user_roles:
             view = CreateSupportButton(guild_id=interaction.guild.id)
-            await interaction.response.send_message("Click the button below to create a Support-Ticket:", view=view)
+            await interaction.response.send_message("", view=view)
         else:
             await interaction.response.send_message("You do not have the required role to use this command.", ephemeral=True)
 
