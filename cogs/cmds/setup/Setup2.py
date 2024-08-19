@@ -128,6 +128,17 @@ class SetupStaffnBirthday(commands.Cog):
         cursor.execute('UPDATE guildinfo SET staffrole_id = ? WHERE guild_id = ?', (staffrole.id, i.guild.id))
         await i.response.send_message("Staff Role has been setup! If you wish to remove all this please do the command again without filling out values!")
 
+    @application_checks.has_permissions(administrator=True)
+    @nextcord.slash_command(
+        name="setup_birthday",
+        description="Setup a birthday channel where users get pinged on their birthday!",
+        guild_ids=[api.GuildID]
+    )
+    async def birthdaysetup(self, i: nextcord.Interaction, birthdaychannel: nextcord.TextChannel):
+        birthdaychannel.id = birthdaychannel.id if birthdaychannel else None       
+
+        cursor.execute('UPDATE guildinfo SET birthday_channel_id = ? WHERE guild_id = ?', (birthdaychannel.id, i.guild.id))
+        await i.response.send_message("Birthdaychannel has been setup! If you wish to remove all this please do the command again without filling out values!")
 
 
 

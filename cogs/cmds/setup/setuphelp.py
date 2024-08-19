@@ -21,7 +21,7 @@ class HelpSetup(commands.Cog):
         self.bot = bot
 
     @nextcord.slash_command(
-        name="setup_help",
+        name="setup_info",
         description="Help commands",
         guild_ids=[api.GuildID]
     )   
@@ -121,11 +121,50 @@ class HelpSetup(commands.Cog):
             value="If you by any chance would have any questions regarding this bot, feel free to message the creator! Discord: twiceee",
             inline=False
         )
-
-
         await i.response.send_message(embed=embed)
 
 
+
+    @nextcord.slash_command(
+        name="setup_help",
+        description="Commands and information about the setup!",
+        guild_ids=[api.GuildID]
+    )
+    async def setuphelp(self, i: nextcord.Interaction):
+        embed = nextcord.Embed(
+            title="Setup Help",
+            description="Do you need help with what to setup and and how?",
+            color=nextcord.Color.blue()
+        )
+        embed.add_field(
+            name="Welcome Setup", 
+            value="You can setup a welcome channel, a onjoin role and a leave channel by typing /setup_help. Here you choose which channels welcome & leave messages should come to and if any roles should be given when they join. You can also remove those channels by making the command again and simply not adding a value, this will make it being set to null!")
+        embed.add_field(
+            name="Logs Setups",
+            value="You can setup the logs using /setup_logs. There are modlogs and serverlogs, modlogs are logs that saves moderational actions such as bans made by the bot and other commands that are used for moderational purposes by the bot! Serverlogs on the other hand logs that is about the server, members joining vc, channels being created etc."
+        )
+        embed.add_field(
+            name="Setup Verify",
+            value="The Verify setup contains selecting a channel and a role. The role will be the official verify role, you can make members obtain it by using selfroles or onjoin role being given. You will have to make channels restricted to only allow the verify role yourself. The voice channel on the otherhand will change name to Unverified: number. It will essentially show how many users there currently are who have not obtained this role and help you manage those members. If you dont which to have this channel feel free to leave it."
+        )
+        embed.add_field(
+            name="Stats Setup",
+            value="You can setup the server stats by using /setup_statschannels. There are 2 different stats, membercount and rolecount. When setting those two you will select 2 voice channels which will similiarly to unverfied number show membercount and rolecount by having the voice channels names changed!"
+        )
+        embed.add_field(
+            name="Support Setup",
+            value="You can setup support tickets by writing /setup_support. Here you can setup a support category as where all ticket channels will appear/created. You will also be able to select ticketlog channels where a transcript of all tickets will be stored! Nonetheless you will setup a support role who have perms to view and moderate the tickets."
+        )
+        embed.add_field(
+            name="Staff Setup",
+            value="You can setup staffrole by writing /setup_staff, this role will be able to handle smaller moderational tasks like locking channels etc!"
+        )
+        embed.add_field(
+            name="Birthday Setup",
+            value="You can setup birthday channel by writing /setup_birthday. This contains a function where users can add their birthday by typing birthday-set and on their birthday in this specific channel they will be pinged and congratulated by the bot and perhaps other users seeing this birthday."
+        )
+        await i.response.send_message(embed=embed)
+        
 def setup(bot: commands.Bot):
     print("Help Cog Registered")
     bot.add_cog(HelpSetup(bot))
