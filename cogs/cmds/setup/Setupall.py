@@ -13,10 +13,13 @@ intents = nextcord.Intents.all()
 database = sqlite3.connect(DBFile)
 cursor = database.cursor()
 
+
+
 class SetupAll(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
-
+        
+    @application_checks.has_permissions(administrator=True)
     @nextcord.slash_command(
         name="setupall",
         description="Setup every channel of the bot",
