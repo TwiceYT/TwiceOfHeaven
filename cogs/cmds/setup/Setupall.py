@@ -13,13 +13,13 @@ intents = nextcord.Intents.all()
 database = sqlite3.connect(DBFile)
 cursor = database.cursor()
 
-class Setup(commands.Cog):
+class SetupAll(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
 
     @nextcord.slash_command(
-        name="setup",
-        description="Setup the bot",
+        name="setupall",
+        description="Setup every channel of the bot",
         guild_ids=[api.GuildID]
     )
     async def setup(self, i: nextcord.Interaction):
@@ -259,7 +259,6 @@ class Setup(commands.Cog):
         view = SetupViewStep1()
         await i.response.send_message(f"Note that some channels might be irrelevant for you, then keep the options blank.\n" f"Do '/setup_help' if you need guidance about the setup\n\n" f"Please select the channels and roles for setup:", view=view, ephemeral=True)
 
-
 def setup(bot: commands.Bot):
-    print("Setup Cog Registered")
-    bot.add_cog(Setup(bot))
+    print("Setup ALL cog Registered")
+    bot.add_cog(SetupAll(bot))

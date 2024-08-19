@@ -17,7 +17,7 @@ class OnError(commands.Cog):
             missing_permissions = ", ".join(error.missing_permissions)
             await interaction.response.send_message(f"I do not have the required permissions to run this command. Missing permissions: `{missing_permissions}`", ephemeral=True)
         else:
-            await interaction.response.send_message(f"An error occurred: {error}")
+            await interaction.response.send_message(f"An error occurred: {error}. Please use /report-bug command to notify the developer about this error!")
 
 
 def setup(bot: commands.Bot):

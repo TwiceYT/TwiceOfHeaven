@@ -1,2 +1,7 @@
 Custom Selfroles feature
 Bug report
+
+Anime commands, /kiss /hug /slap /pat
+
+
+BEFORE LAUNCH MAKE SURE THAT PERMISSIONS IS SETUP CORRECTLY

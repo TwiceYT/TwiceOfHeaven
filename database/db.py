@@ -14,6 +14,7 @@ def setup():
                 guild_name TEXT,
                 modlogs INTEGER,
                 welcome_channel_id INTEGER,
+                welcome_color TEXT,
                 join_role_id INTEGER,
                 leave_channel_id INTEGER,
                 membercount_channel INTEGER,
@@ -29,8 +30,6 @@ def setup():
                 join_date TEXT
             )
         """)
-
-
 
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS bans (
@@ -186,10 +185,16 @@ def setup():
 
 
 
-
-
-
-
+        #Adds an column to a table
+        """ try:
+            cursor.execute("ALTER TABLE guildinfo ADD COLUMN welcome_color TEXT DEFAULT '00ff00';")
+            db_connection.commit()
+            print("Column 'welcome_color' added successfully.")
+        except sqlite3.OperationalError as e:
+            if "duplicate column name" in str(e):
+                print("Column 'welcome_color' already exists.")
+            else:
+                raise e """
 
 
 
@@ -207,3 +212,5 @@ def setup():
     except Exception as e:
         print("Error during database setup:", e)
         return None, None
+
+
