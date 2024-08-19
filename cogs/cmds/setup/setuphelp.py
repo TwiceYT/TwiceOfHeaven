@@ -121,7 +121,7 @@ class HelpSetup(commands.Cog):
             value="If you by any chance would have any questions regarding this bot, feel free to message the creator! Discord: twiceee",
             inline=False
         )
-        await i.response.send_message(embed=embed)
+        await i.response.send_message(embed=embed, ephemeral=True)
 
 
 
@@ -163,8 +163,8 @@ class HelpSetup(commands.Cog):
             name="Birthday Setup",
             value="You can setup birthday channel by writing /setup_birthday. This contains a function where users can add their birthday by typing birthday-set and on their birthday in this specific channel they will be pinged and congratulated by the bot and perhaps other users seeing this birthday."
         )
-        await i.response.send_message(embed=embed)
-        
+        await i.response.send_message(embed=embed, ephemeral=True)
+
 def setup(bot: commands.Bot):
     print("Help Cog Registered")
     bot.add_cog(HelpSetup(bot))
