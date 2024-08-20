@@ -137,31 +137,39 @@ class HelpSetup(commands.Cog):
             color=nextcord.Color.blue()
         )
         embed.add_field(
-            name="Welcome Setup", 
-            value="You can setup a welcome channel, a onjoin role and a leave channel by typing /setup_help. Here you choose which channels welcome & leave messages should come to and if any roles should be given when they join. You can also remove those channels by making the command again and simply not adding a value, this will make it being set to null!")
+            name="/setup_welcome", 
+            value="You can setup a welcome channel, a onjoin role and a leave channel. Here you choose which channels welcome & leave messages should come to and if any roles should be given when they join. You can also remove those channels by making the command again and simply not adding a value, this will make it being set to null!")
         embed.add_field(
-            name="Logs Setups",
-            value="You can setup the logs using /setup_logs. There are modlogs and serverlogs, modlogs are logs that saves moderational actions such as bans made by the bot and other commands that are used for moderational purposes by the bot! Serverlogs on the other hand logs that is about the server, members joining vc, channels being created etc."
+            name="/setup_logs",
+            value="There are modlogs and serverlogs, modlogs are logs that saves moderational actions such as bans made by the bot and other commands that are used for moderational purposes by the bot! Serverlogs on the other hand logs that is about the server, members joining vc, channels being created etc."
         )
         embed.add_field(
-            name="Setup Verify",
-            value="The Verify setup contains selecting a channel and a role. The role will be the official verify role, you can make members obtain it by using selfroles or onjoin role being given. You will have to make channels restricted to only allow the verify role yourself. The voice channel on the otherhand will change name to Unverified: number. It will essentially show how many users there currently are who have not obtained this role and help you manage those members. If you dont which to have this channel feel free to leave it."
+            name="setup_verify",
+            value="The Verify setup contains selecting a channel and a role. The role will be the official verify role, you can make members obtain it by using selfroles or onjoin role being given. You will have to make channels restricted to only allow the verify role yourself. The voice channel on the otherhand will change name to Unverified: number. It will essentially show how many users there currently are who have not obtained this role and help you manage those members. If you dont wish to have this channel feel free to leave it."
         )
         embed.add_field(
-            name="Stats Setup",
-            value="You can setup the server stats by using /setup_statschannels. There are 2 different stats, membercount and rolecount. When setting those two you will select 2 voice channels which will similiarly to unverfied number show membercount and rolecount by having the voice channels names changed!"
+            name="/setup_statschannels",
+            value="There are 2 different stats, membercount and rolecount. When setting those two you will select 2 voice channels which will similiarly to unverfied number show membercount and rolecount by having the voice channels names changed!"
         )
         embed.add_field(
-            name="Support Setup",
-            value="You can setup support tickets by writing /setup_support. Here you can setup a support category as where all ticket channels will appear/created. You will also be able to select ticketlog channels where a transcript of all tickets will be stored! Nonetheless you will setup a support role who have perms to view and moderate the tickets."
+            name="/setup_support",
+            value="Here you can setup a support category as where all ticket channels will appear/created. You will also be able to select ticketlog channels where a transcript of all tickets will be stored! Nonetheless you will setup a support role who have perms to view and moderate the tickets."
         )
         embed.add_field(
-            name="Staff Setup",
-            value="You can setup staffrole by writing /setup_staff, this role will be able to handle smaller moderational tasks like locking channels etc!"
+            name="/setup_staff",
+            value="You can setup staffrole, this role will be able to handle smaller moderational tasks like locking channels etc!"
         )
         embed.add_field(
-            name="Birthday Setup",
-            value="You can setup birthday channel by writing /setup_birthday. This contains a function where users can add their birthday by typing birthday-set and on their birthday in this specific channel they will be pinged and congratulated by the bot and perhaps other users seeing this birthday."
+            name="/setup_birthday",
+            value="This contains a function where users can add their birthday by typing birthday-set and on their birthday in this specific channel they will be pinged and congratulated by the bot and perhaps other users seeing this birthday."
+        )
+        embed.add_field(
+            name="/setup_report",
+            value="This contains a function where users can report other members! Set a channel up and reports will be sent into this channel by users writing /report"
+        )
+        embed.add_field(
+            name="Wish to remove channel?",
+            value="If you have setup a channel and wish to remove the sync, please write the command again and simply dont fill out the values. By not setting a value the channel will be set to null and the function will be disabled."
         )
         await i.response.send_message(embed=embed, ephemeral=True)
 

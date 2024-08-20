@@ -179,22 +179,27 @@ def setup():
             )
         """)
 
-
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS bugreport (
+                guild_id INTEGER,
+                channel_id INTEGER
+            )
+        """)
 
 
 
 
 
         #Adds an column to a table
-        """ try:
-            cursor.execute("ALTER TABLE guildinfo ADD COLUMN welcome_color TEXT DEFAULT '00ff00';")
+        try:
+            cursor.execute("ALTER TABLE guildinfo ADD COLUMN report_channel TEXT;")
             db_connection.commit()
             print("Column 'welcome_color' added successfully.")
         except sqlite3.OperationalError as e:
             if "duplicate column name" in str(e):
                 print("Column 'welcome_color' already exists.")
             else:
-                raise e """
+                raise e 
 
 
 

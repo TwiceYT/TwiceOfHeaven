@@ -142,6 +142,18 @@ class SetupStaffnBirthday(commands.Cog):
 
 
 
+    @application_checks.has_permissions(administrator=True)
+    @nextcord.slash_command(
+        name="setup_report",
+        description="Setup a report channel where users get report other members!",
+        guild_ids=[api.GuildID]
+    )
+    async def birthdaysetup(self, i: nextcord.Interaction, reportchannel: nextcord.TextChannel):
+        reportchannel.id = reportchannel.id if reportchannel else None       
+
+        cursor.execute('UPDATE guildinfo SET report_channel = ? WHERE guild_id = ?', (reportchannel.id, i.guild.id))
+        await i.response.send_message("report channel has been setup! If you wish to remove all this please do the command again without filling out values!")
+
 def setup(bot: commands.Bot):
     print("Setup Cog Registered")
     bot.add_cog(SetupWelcome(bot))
