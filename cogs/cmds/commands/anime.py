@@ -187,6 +187,7 @@ class Anime(commands.Cog):
             await i.response.send_message(embed=embed)
         else:
             await i.response.send_message(f"No GIFs found for '{search_term}'")
+
             
         
 def setup(bot: commands.Bot):

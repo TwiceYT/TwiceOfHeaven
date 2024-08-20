@@ -32,7 +32,7 @@ class Calc(commands.Cog):
         result, expr = calculate(expression)
         embed = nextcord.Embed(
             title="Calculation Result:",
-            description=f"{expr} = {result}",
+            description=f"{result}",
         )
         embed.set_footer(text="The procedure might look diff, but shall be right answer!")
         await ctx.send(embed=embed)

@@ -1,4 +1,6 @@
 Custom Selfroles feature
-Bug report
+
+Ticket Close fix
+Mp3 fix
 
 BEFORE LAUNCH MAKE SURE THAT PERMISSIONS IS SETUP CORRECTLY

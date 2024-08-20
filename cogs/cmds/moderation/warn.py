@@ -1,5 +1,5 @@
 import nextcord
-from nextcord.ext import commands
+from nextcord.ext import commands, application_checks
 from datetime import datetime
 import api as api
 import sqlite3
@@ -12,6 +12,37 @@ DBFile = os.getenv("DATABASE_FILE")
 
 database = sqlite3.connect(DBFile)
 cursor = database.cursor()
+
+def get_staffrole(i: nextcord.Interaction):
+    with sqlite3.connect('toh.db') as database:
+        cursor = database.cursor()
+        cursor.execute('SELECT staffrole_id FROM guildinfo WHERE guild_id = ?', (i.guild.id,))
+        staffrole = cursor.fetchone()
+        if staffrole:
+            return staffrole[0]
+        else:
+            i.response.send_message("You need to set up your kick logs using /setup", ephemeral=True)
+            return None
+
+def is_staff_or_admin():
+    async def predicate(i: nextcord.Interaction):
+        if i.user.guild_permissions.administrator:
+            return True
+        
+        staff_role_id = get_staffrole(i)
+        if staff_role_id is None:
+            return False
+        
+        staff_role = i.guild.get_role(staff_role_id)
+        if staff_role in i.user.roles:
+            return True
+        
+        await i.response.send_message("You don't have permission to use this command.", ephemeral=True)
+        return False
+    
+    return application_checks.check(predicate)
+
+
 
 def get_warnlog_channel(guild_id: int):
     cursor.execute('SELECT modlogs FROM guildinfo WHERE guild_id = ?', (guild_id,))
@@ -63,7 +94,7 @@ class Warn(commands.Cog):
 ##
 #
 
-
+    @is_staff_or_admin()
     @nextcord.slash_command(
         name="warn",
         description="Warn a user",

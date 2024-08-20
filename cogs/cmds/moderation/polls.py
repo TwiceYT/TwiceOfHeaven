@@ -1,5 +1,5 @@
 import nextcord
-from nextcord.ext import commands, tasks
+from nextcord.ext import commands, tasks, application_checks
 import api
 import sqlite3
 import datetime
@@ -16,6 +16,36 @@ cursor = database.cursor()
 intents = nextcord.Intents.all()
 
 
+def get_staffrole(i: nextcord.Interaction):
+    with sqlite3.connect('toh.db') as database:
+        cursor = database.cursor()
+        cursor.execute('SELECT staffrole_id FROM guildinfo WHERE guild_id = ?', (i.guild.id,))
+        staffrole = cursor.fetchone()
+        if staffrole:
+            return staffrole[0]
+        else:
+            i.response.send_message("You need to set up your kick logs using /setup", ephemeral=True)
+            return None
+
+def is_staff_or_admin():
+    async def predicate(i: nextcord.Interaction):
+        if i.user.guild_permissions.administrator:
+            return True
+        
+        staff_role_id = get_staffrole(i)
+        if staff_role_id is None:
+            return False
+        
+        staff_role = i.guild.get_role(staff_role_id)
+        if staff_role in i.user.roles:
+            return True
+        
+        await i.response.send_message("You don't have permission to use this command.", ephemeral=True)
+        return False
+    
+    return application_checks.check(predicate)
+
+
 class Poll(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
@@ -28,6 +58,7 @@ class Poll(commands.Cog):
     def cog_unload(self):
         self.update_poll_task.cancel()
 
+    @is_staff_or_admin()
     @nextcord.slash_command(
         name="poll",
         description="Make a poll on the server.",
