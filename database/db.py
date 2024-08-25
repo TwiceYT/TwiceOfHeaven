@@ -190,16 +190,16 @@ def setup():
 
 
 
-        #Adds an column to a table
-        try:
-            cursor.execute("ALTER TABLE guildinfo ADD COLUMN report_channel TEXT;")
-            db_connection.commit()
-            print("Column 'welcome_color' added successfully.")
-        except sqlite3.OperationalError as e:
-            if "duplicate column name" in str(e):
-                print("Column 'welcome_color' already exists.")
-            else:
-                raise e 
+        # #Adds an column to a table
+        # try:
+        #     cursor.execute("ALTER TABLE guildinfo ADD COLUMN report_channel TEXT;")
+        #     db_connection.commit()
+        #     print("Column 'welcome_color' added successfully.")
+        # except sqlite3.OperationalError as e:
+        #     if "duplicate column name" in str(e):
+        #         print("Column 'welcome_color' already exists.")
+        #     else:
+        #         raise e 
 
 
 

@@ -151,7 +151,7 @@ class Anime(commands.Cog):
     @nextcord.slash_command(name="kill", description="Search for kill GIFs using Tenor API", guild_ids=[api.GuildID])
     async def kill(self, i: nextcord.Interaction, member: nextcord.Member):
         # Define the search term for the hug command
-        search_term = "Anime Kill"
+        search_term = "Anime Kill wasted"
 
         # Fetch a random GIF using the helper function
         gif_url = await self.fetch_random_gif(search_term)
@@ -193,4 +193,3 @@ class Anime(commands.Cog):
 def setup(bot: commands.Bot):
     print("Anime Cog Registered")
     bot.add_cog(Anime(bot))
-
