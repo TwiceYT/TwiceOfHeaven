@@ -10,8 +10,8 @@ intents.message_content = True
 
 bot = commands.Bot(command_prefix="!", intents=intents)
 
-# Define the folder where MP3 files will be saved
-DOWNLOAD_FOLDER = 'F:\pogrammering\Bot\Python\TwiceOfHeaven\download'  # Change this to your desired directory
+
+DOWNLOAD_FOLDER = 'F:\pogrammering\Bot\Python\TwiceOfHeaven\Extra\downloadmp3s' 
 
 # Ensure the directory exists
 if not os.path.exists(DOWNLOAD_FOLDER):
@@ -24,7 +24,7 @@ class Mp3Conv(commands.Cog):
     @nextcord.slash_command(
         name="mp3",
         description="Convert any YouTube link to an MP3 file",
-        guild_ids=[api.GuildID]  # Replace api.GuildID with your guild ID or remove for global commands
+        guild_ids=[api.GuildID]
     )
     async def convert(self, i: nextcord.Interaction, yturl: str):
         await i.response.send_message("Starting download... Large files can take a while... Please be patient!",)
