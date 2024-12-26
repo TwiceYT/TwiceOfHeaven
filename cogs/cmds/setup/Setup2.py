@@ -141,7 +141,6 @@ class SetupStaffnBirthday(commands.Cog):
         await i.response.send_message("Birthdaychannel has been setup! If you wish to remove all this please do the command again without filling out values!")
 
 
-
     @application_checks.has_permissions(administrator=True)
     @nextcord.slash_command(
         name="setup_report",

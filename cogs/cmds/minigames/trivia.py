@@ -138,4 +138,4 @@ class Trivia(commands.Cog):
 
 def setup(bot: commands.Bot):
     print("Trivia Cog Registered")
-    #bot.add_cog(Trivia(bot))
+    bot.add_cog(Trivia(bot))

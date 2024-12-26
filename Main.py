@@ -6,25 +6,24 @@ import os
 from dotenv import load_dotenv, dotenv_values
 import api
 
-#Load env file
+
 load_dotenv(dotenv_path='config\config.env')
 
-#Load custom Prefix
+
 Prefix = os.getenv("Prefix")
 
 # Initialize bot with intents and prefix
 intents = nextcord.Intents.all()
 bot = commands.Bot(command_prefix=Prefix, intents=intents)
 
-# Set up database connection
 db_connection, db_cursor = setup()
 
 if db_connection is not None and db_cursor is not None:
-    bot.db_connection = db_connection  # Store the connection in the bot instance
-    bot.db_cursor = db_cursor          # Store the cursor in the bot instance
+    bot.db_connection = db_connection 
+    bot.db_cursor = db_cursor          
 else:
     print("Database connection failed. Cannot start the bot.")
-    exit(1)  # Exit the script if database connection failed
+    exit(1)  
 
 # Test command
 @bot.command()

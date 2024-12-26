@@ -5,6 +5,7 @@ import sqlite3
 import datetime
 import os
 from dotenv import load_dotenv, dotenv_values
+from nextcord import SlashOption
 
 # Database file
 load_dotenv(dotenv_path='config\config.env')
@@ -64,21 +65,28 @@ class Poll(commands.Cog):
         description="Make a poll on the server.",
         guild_ids=[api.GuildID]
     )
-    async def create_poll(self, i: nextcord.Interaction, time: int, question: str, options: str, thumbnail: str):
+    async def create_poll(
+        self,
+        i: nextcord.Interaction,
+        time: int = SlashOption(description="Duration of the poll in hours."),
+        question: str = SlashOption(description="The poll question."),
+        options: str = SlashOption(description="Comma-separated list of options."),
+        thumbnail: str = SlashOption(description="URL of the thumbnail image.", required=False)
+    ):
 
         options_list = [option.strip() for option in options.split(',')]
 
         if len(options_list) > 10 or len(options_list) < 2:
             await i.response.send_message(":no_entry: Please provide at least 2 options and a maximum of 10")
             return
-        elif time <= 1:
+        elif time <= 0.9:
             await i.response.send_message(":no_entry: Please provide a poll end time longer than 1h")
             return
 
         end_time = datetime.datetime.utcnow() + datetime.timedelta(hours=time)
 
         embed = nextcord.Embed(
-            title="Twice Polls",
+            title="Polls Time!!",
             description="",
             color=nextcord.Color.gold()
         )

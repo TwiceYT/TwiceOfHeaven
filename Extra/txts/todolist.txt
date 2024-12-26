@@ -1,6 +1,7 @@
-Custom Selfroles feature
+Ticket fix
 
-Ticket Close fix
-Mp3 fix
+report SETUP
+
+
 
 BEFORE LAUNCH MAKE SURE THAT PERMISSIONS IS SETUP CORRECTLY

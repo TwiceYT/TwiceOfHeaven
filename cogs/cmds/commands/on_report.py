@@ -177,14 +177,6 @@ class ReportModal(nextcord.ui.Modal):
         embed.set_footer(text="Sent in by: " + interaction.user.display_name, icon_url=interaction.user.avatar.url)
 
 
-        repchannel = get_report_channel(interaction)
-        if repchannel is None:
-            return  
-
-        channel = interaction.guild.get_channel(repchannel)
-        if channel:
-            await channel.send(embed=embed)
-            await interaction.followup.send("Your report has been sent to the staff team!", ephemeral=True)
 
 class Report(commands.Cog):
     def __init__(self, bot: commands.Bot):
@@ -197,8 +189,16 @@ class Report(commands.Cog):
     )
     async def report(self, i: nextcord.Interaction):
         modal = ReportModal(closesrep_view=None)
-        await i.response.send_modal(modal)
 
+        repchannel = get_report_channel(i)
+        print(get_report_channel)
+        if repchannel is None:
+            return  
+
+        channel = i.guild.get_channel(repchannel)
+        if channel:
+            await i.response.send_modal(modal)
+            await i.followup.send("Your report has been sent to the staff team!", ephemeral=True)
 
 def setup(bot: commands.Bot):
     print("Report Cog Registered")

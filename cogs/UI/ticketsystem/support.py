@@ -68,7 +68,7 @@ class SupportModal(nextcord.ui.Modal):
         self.add_item(self.embed_description)
 
     async def callback(self, interaction: nextcord.Interaction):
-        await interaction.response.defer()
+        await interaction.response.defer()  # Defer the interaction response
 
         embed = nextcord.Embed(
             title="Support Ticket",
@@ -90,7 +90,7 @@ class SupportModal(nextcord.ui.Modal):
         SupportRole = guild.get_role(TICKET_SUPPORT_ID)
 
         if StaffRole is None or SupportRole is None:
-            await interaction.response.send_message("Error: Required role not found. Please contact an administrator.", ephemeral=True)
+            await interaction.followup.send("Error: Required role not found. Please contact an administrator.", ephemeral=True)
             return
 
         overwrites = {
@@ -103,7 +103,7 @@ class SupportModal(nextcord.ui.Modal):
 
         category = guild.get_channel(SUPPORT_CATEGORY_ID)
         if category is None:
-            await interaction.response.send_message("Error: Support category not found. Please contact an administrator.", ephemeral=True)
+            await interaction.followup.send("Error: Support category not found. Please contact an administrator.", ephemeral=True)
             return
 
         ticket_channel = await guild.create_text_channel(ticket_channel_name, overwrites=overwrites, category=category)
@@ -111,6 +111,7 @@ class SupportModal(nextcord.ui.Modal):
 
         await ticket_channel.send(content=f"{user.mention}, your ticket has been created.", embed=embed, view=view)
         await user.send(f"Your support ticket has been created. Please use the channel {ticket_channel.mention} for further communication.")
+
 
 
 class CreateSupportButton(nextcord.ui.View):
@@ -140,10 +141,10 @@ class Support(commands.Cog):
         STAFF_ROLE_ID = get_staffID(interaction.guild.id)
         TICKET_SUPPORT_ID = get_ticketsupportID(interaction.guild.id)
         user_roles = [role.id for role in interaction.user.roles]
-        
+
         if STAFF_ROLE_ID in user_roles or TICKET_SUPPORT_ID in user_roles:
             view = CreateSupportButton(guild_id=interaction.guild.id)
-            await interaction.response.send_message("", view=view)
+            await interaction.response.send_message("Click the button below to create a Support-Ticket:", view=view)
         else:
             await interaction.response.send_message("You do not have the required role to use this command.", ephemeral=True)
 
