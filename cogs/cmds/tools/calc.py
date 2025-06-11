@@ -32,7 +32,8 @@ class Calc(commands.Cog):
             title="Calculation Result:",
             description=f"{result}",
         )
-        embed.set_footer(text="The procedure might look diff, but shall be right answer!")
+        embed.set_footer(text="Learn how to calculate yourself!! I am not a slave to do your homework!")
+        embed.color = nextcord.Color.blurple()
         await ctx.send(embed=embed)
 
 

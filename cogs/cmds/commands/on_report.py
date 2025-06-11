@@ -19,7 +19,8 @@ intents = nextcord.Intents.all()
 def get_bugreport_channel():
     with sqlite3.connect('toh.db') as database:
         cursor = database.cursor()
-        cursor.execute('SELECT channel_id FROM bugreport WHERE guild_id = ?', (SupportID,))
+        cursor.execute('SELECT channel_id FROM bugreport')
+
         channel = cursor.fetchone()
         if channel:
             return channel[0]
@@ -40,9 +41,11 @@ def get_report_channel(i: nextcord.Interaction):
 
 
 class BugReportModal(nextcord.ui.Modal):
-    def __init__(self, closesbug_view):
+    def __init__(self, bot, closesbug_view):
         super().__init__("Bot Bugreport", custom_id="bugrepmodal", timeout=100.0)
+        self.bot = bot
         self.closesbug_view = closesbug_view
+
         self.server = nextcord.ui.TextInput(
             label="What is the name of the current server?",
             placeholder="Please provide a the server name you are reporting from or recieve the issue.",
@@ -98,12 +101,18 @@ class BugReportModal(nextcord.ui.Modal):
 
         channelid = get_bugreport_channel()
         if channelid is None:
-            return  
+            return
 
-        channel = interaction.guild.get_channel(channelid)
-        if channel:
-            await channel.send(embed=embed)
-            await interaction.followup.send("Your report has been sent to the Dev-Team.", ephemeral=True)
+        channel = self.bot.get_channel(channelid)
+        if channel is None:
+            try:
+                channel = await self.bot.fetch_channel(channelid)
+            except nextcord.NotFound:
+                await interaction.followup.send("Bug report channel not found.", ephemeral=True)
+                return
+
+        await channel.send(embed=embed)
+        await interaction.followup.send("Your report has been sent to the Dev-Team.", ephemeral=True)
 
 
 class BugReport(commands.Cog):
@@ -115,7 +124,7 @@ class BugReport(commands.Cog):
         description="Report any bugs you are experiencing to the Bot-Developer of the bot"
     )
     async def bugreport(self, i: nextcord.Interaction):
-        modal = BugReportModal(closesbug_view=None)
+        modal = BugReportModal(bot=self.bot, closesbug_view=None)
         await i.response.send_modal(modal)
 
 
@@ -128,8 +137,9 @@ class BugReport(commands.Cog):
 
 
 class ReportModal(nextcord.ui.Modal):
-    def __init__(self, closesrep_view):
+    def __init__(self, bot, closesrep_view):
         super().__init__("report", custom_id="reportmodal", timeout=100.0)
+        self.bot = bot
         self.closesbug_view = closesrep_view
         self.name = nextcord.ui.TextInput(
             label="What is the name of the user?",
@@ -187,15 +197,19 @@ class Report(commands.Cog):
     async def report(self, i: nextcord.Interaction):
         modal = ReportModal(closesrep_view=None)
 
-        repchannel = get_report_channel(i)
-        print(get_report_channel)
-        if repchannel is None:
-            return  
+        channelid = get_bugreport_channel()
+        if channelid is None:
+            return
 
-        channel = i.guild.get_channel(repchannel)
+        # Get the channel globally from bot cache
+        channel = self.bot.get_channel(channelid)
+
         if channel:
-            await i.response.send_modal(modal)
-            await i.followup.send("Your report has been sent to the staff team!", ephemeral=True)
+            await channel.send(modal)
+            await i.followup.send("Your report has been sent to the Dev-Team.", ephemeral=True)
+        else:
+            await i.followup.send("Could not find the bug report channel. Please contact the server admin.", ephemeral=True)
+
 
 def setup(bot: commands.Bot):
     print("Report Cog Registered")

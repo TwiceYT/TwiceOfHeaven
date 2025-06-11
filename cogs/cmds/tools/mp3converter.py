@@ -10,7 +10,7 @@ intents.message_content = True
 bot = commands.Bot(command_prefix="!", intents=intents)
 
 
-DOWNLOAD_FOLDER = 'F:\pogrammering\Bot\Python\TwiceOfHeaven\Extra\downloadmp3s' 
+DOWNLOAD_FOLDER = 'Extra/downloadmp3s' 
 
 # Ensure the directory exists
 if not os.path.exists(DOWNLOAD_FOLDER):
@@ -25,7 +25,7 @@ class Mp3Conv(commands.Cog):
         description="Convert any YouTube link to an MP3 file",
     )
     async def convert(self, i: nextcord.Interaction, yturl: str):
-        await i.response.send_message("Starting download... Large files can take a while... Please be patient!",)
+        await i.response.send_message("Starting download... Large files can take a while... Please be patient!", ephemeral=True)
         output_path = None
         try:
             # Set up yt-dlp options to download only the single video, ignoring playlists
@@ -48,14 +48,14 @@ class Mp3Conv(commands.Cog):
 
                     if os.path.exists(output_path):
                         await i.followup.send("Download complete. Uploading MP3 file!", ephemeral=True)
-                        await i.followup.send("Here is your downloaded MP3!", file=nextcord.File(output_path))
+                        await i.followup.send("Here is your downloaded MP3!", file=nextcord.File(output_path), epemeral=True)
                     else:
-                        await i.followup.send("An error occurred: MP3 file not found.")
+                        await i.followup.send("An error occurred: MP3 file not found. This error could also occur if the video title includes emojis and special characters! If still not working please make a /bot_bugreport", ephemeral=True)
                 else:
-                    await i.followup.send("An error occurred: Could not retrieve video information.")
+                    await i.followup.send("An error occurred: Could not retrieve video information.", ephemeral=True)
 
         except Exception as e:
-            await i.followup.send(f"An error occurred: {e}")
+            await i.followup.send(f"An error occurred: {e}", ephemeral=True)
         finally:
             # Clean up files
             if output_path and os.path.exists(output_path):

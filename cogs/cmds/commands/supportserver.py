@@ -20,12 +20,19 @@ class supportserver(commands.Cog):
         self.bot = bot
 
     @nextcord.slash_command(
-        name="bot_server",
-        description="Fetch an invite to the bots original support server!"
+        name="bot_supportserver",
+        description="Get the support server invite link."
     )
-    async def supserv(self, i: nextcord.Interaction):
-        await i.response.send_message(Invite)
+    async def supportserver(self, i: nextcord.Interaction):
+        embed = nextcord.Embed(
+            title="Support Server",
+            description="Join our support server for help and updates!",
+            color=nextcord.Color.blue()
+        )
+        embed.add_field(name="Invite Link", value=f"[Click here to join]({Invite})", inline=False)
+        embed.set_thumbnail(url=self.bot.user.avatar.url)
+        await i.response.send_message(embed=embed, ephemeral=True)
 
 def setup(bot: commands.Bot):
-    print("supserv Cog Registered")
+    print("supservdddddddddddddddddddddddd Cog Registered")
     bot.add_cog(supportserver(bot))

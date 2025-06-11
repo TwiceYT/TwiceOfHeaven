@@ -7,7 +7,7 @@ from dotenv import load_dotenv, dotenv_values
 
 # Database file
 load_dotenv(dotenv_path='config/config.env')
-DBFile = os.getenv("ATABASE_FILE")
+DBFile = os.getenv("DATABASE_FILE")
 
 # Initialize the bot
 intents = nextcord.Intents.all()
