@@ -1,6 +1,5 @@
 import nextcord
 from nextcord.ext import commands, application_checks
-import api
 import sqlite3
 import os
 from dotenv import load_dotenv, dotenv_values

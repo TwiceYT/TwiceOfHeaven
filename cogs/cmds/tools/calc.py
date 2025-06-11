@@ -1,6 +1,5 @@
 import nextcord
 from nextcord.ext import commands
-import api
 import sqlite3
 import sympy as sp
 
