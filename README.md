@@ -20,3 +20,6 @@ Welcome to the **Twice Of Heaven** Multi-Function Discord Bot – a powerful, fl
 🧠 AI Chat- ChatGPT-powered responses
 
 🔗 Custom Commands & Auto-Responses
+
+Database: SQLite
+& SQLite browser
