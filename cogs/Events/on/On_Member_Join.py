@@ -1,6 +1,5 @@
 import nextcord
 from nextcord.ext import commands
-import api as api
 from datetime import datetime
 import random
 import sqlite3

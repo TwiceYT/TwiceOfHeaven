@@ -1,6 +1,5 @@
 import nextcord
 from nextcord.ext import commands, application_checks
-import api
 
 intents = nextcord.Intents.all()
 
@@ -12,7 +11,6 @@ class about(commands.Cog):
     @nextcord.slash_command(
         name="about",
         description="Get information about user",
-        guild_ids=[api.GuildID]
     )
     async def about(self, i: nextcord.Interaction, member: nextcord.Member = nextcord.SlashOption(description="The member to get information about")):
             embed = nextcord.Embed(

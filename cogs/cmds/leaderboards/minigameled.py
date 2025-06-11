@@ -1,7 +1,6 @@
 import nextcord
 from nextcord.ext import commands
 import sqlite3
-import api 
 import os
 from dotenv import load_dotenv, dotenv_values
 
@@ -24,8 +23,7 @@ class MinigameLed(commands.Cog):
 
     @nextcord.slash_command(
         name="minigame-led",
-        description="Check the minigames leaderboard",
-        guild_ids=[api.GuildID]    
+        description="Check the minigames leaderboard"
     )
     async def leaderboard(self, i: nextcord.Interaction):
         try:
@@ -113,8 +111,7 @@ class MinigameLed(commands.Cog):
 
     @nextcord.slash_command(
         name="trivia-led",
-        description="Check the Trivia leaderboard",
-        guild_ids=[api.GuildID]    
+        description="Check the Trivia leaderboard"   
     )
     async def trivia_leaderboard(self, i: nextcord.Interaction):
         try:
@@ -129,8 +126,7 @@ class MinigameLed(commands.Cog):
 
     @nextcord.slash_command(
         name="guessing-led",
-        description="Check the Guessing leaderboard",
-        guild_ids=[api.GuildID]    
+        description="Check the Guessing leaderboard"   
     )
     async def guessing_leaderboard(self, i: nextcord.Interaction):
         try:
@@ -145,8 +141,7 @@ class MinigameLed(commands.Cog):
 
     @nextcord.slash_command(
         name="pvp-led",
-        description="Check the PVP leaderboard",
-        guild_ids=[api.GuildID]    
+        description="Check the PVP leaderboard"  
     )
     async def pvp_leaderboard(self, i: nextcord.Interaction):
         try:

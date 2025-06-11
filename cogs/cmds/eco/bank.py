@@ -1,6 +1,5 @@
 import nextcord
 from nextcord.ext import commands, application_checks
-import api
 import sqlite3
 import os
 from dotenv import load_dotenv, dotenv_values
@@ -22,8 +21,7 @@ class bank(commands.Cog):
     #Check how much a user has in his bank
     @nextcord.slash_command(
         name="bank",
-        description="Check how much a user has in his bank account",
-        guild_ids=[api.GuildID]
+        description="Check how much a user has in his bank account"
     )
     async def bank(self, i: nextcord.Interaction, member: nextcord.Member):
 

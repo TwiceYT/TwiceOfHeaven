@@ -1,7 +1,6 @@
 import nextcord
 from nextcord.ext import commands, application_checks
 import webcolors
-import api
 
 class CustomEmbed(commands.Cog):
     def __init__(self, bot):
@@ -10,8 +9,7 @@ class CustomEmbed(commands.Cog):
     @application_checks.has_permissions(manage_messages=True)
     @nextcord.slash_command(
         name="custom_embed",
-        description="Create a custom embed.",
-        guild_ids=[api.GuildID]
+        description="Create a custom embed."
     )
     async def custom_embed(self, i: nextcord.Interaction, channel: nextcord.abc.GuildChannel):
         modal = CustomEmbedModal(channel.id)  # Pass the channel ID to the modal

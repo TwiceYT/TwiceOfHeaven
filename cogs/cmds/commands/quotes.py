@@ -1,6 +1,5 @@
 import nextcord
 from nextcord.ext import commands, application_checks
-import api
 import requests
 import json
 
@@ -13,8 +12,7 @@ class Quotes(commands.Cog):
 
     @nextcord.slash_command(
         name="quotes",
-        description="Generate a random quote!",
-        guild_ids=[api.GuildID]
+        description="Generate a random quote!"
     )
     async def quote(self, i: nextcord.Interaction):
         response = requests.get("https://zenquotes.io/api/random")

@@ -1,6 +1,5 @@
 import nextcord
 from nextcord.ext import commands, application_checks
-import api as api
 import sqlite3
 import os
 from dotenv import load_dotenv, dotenv_values
@@ -25,8 +24,7 @@ class MessageLed(commands.Cog):
 
     @nextcord.slash_command(
     name="msg-led",
-    description="Check the message leaderboard",
-    guild_ids=[api.GuildID]    
+    description="Check the message leaderboard"  
     )
     async def leaderboard(self, i: nextcord.Interaction):
         cursor.execute("""

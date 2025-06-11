@@ -5,7 +5,6 @@ import os
 from dotenv import load_dotenv
 import json
 import requests
-import api
 import random
 
 # Load environment variables
@@ -43,7 +42,7 @@ class Anime(commands.Cog):
             else:
                 return None
 
-    @nextcord.slash_command(name="kiss", description="Search for kiss GIFs using Tenor API", guild_ids=[api.GuildID])
+    @nextcord.slash_command(name="kiss", description="Search for kiss GIFs using Tenor API")
     async def kiss(self, i: nextcord.Interaction, member: nextcord.Member):
         # Define the search term for the kiss command
         search_term = "Anime Romantic Kiss"
@@ -65,7 +64,7 @@ class Anime(commands.Cog):
 
 
 
-    @nextcord.slash_command(name="hug", description="Search for hug GIFs using Tenor API", guild_ids=[api.GuildID])
+    @nextcord.slash_command(name="hug", description="Search for hug GIFs using Tenor API")
     async def hug(self, i: nextcord.Interaction, member: nextcord.Member):
         # Define the search term for the hug command
         search_term = "Anime Hug"
@@ -86,7 +85,7 @@ class Anime(commands.Cog):
             await i.response.send_message(f"No GIFs found for '{search_term}'", ephemeral=True)
 
 
-    @nextcord.slash_command(name="slap", description="Search for slap GIFs using Tenor API", guild_ids=[api.GuildID])
+    @nextcord.slash_command(name="slap", description="Search for slap GIFs using Tenor API")
     async def slap(self, i: nextcord.Interaction, member: nextcord.Member):
         # Define the search term for the hug command
         search_term = "Anime slap"
@@ -107,7 +106,7 @@ class Anime(commands.Cog):
             await i.response.send_message(f"No GIFs found for '{search_term}'", ephemeral=True)
 
 
-    @nextcord.slash_command(name="pat", description="Search for pat GIFs using Tenor API", guild_ids=[api.GuildID])
+    @nextcord.slash_command(name="pat", description="Search for pat GIFs using Tenor API")
     async def pat(self, i: nextcord.Interaction, member: nextcord.Member):
         # Define the search term for the hug command
         search_term = "Anime pat"
@@ -128,7 +127,7 @@ class Anime(commands.Cog):
             await i.response.send_message(f"No GIFs found for '{search_term}'", ephemeral=True)
 
 
-    @nextcord.slash_command(name="cuddle", description="Search for cuddle GIFs using Tenor API", guild_ids=[api.GuildID])
+    @nextcord.slash_command(name="cuddle", description="Search for cuddle GIFs using Tenor API")
     async def cuddle(self, i: nextcord.Interaction, member: nextcord.Member):
         # Define the search term for the hug command
         search_term = "Anime Cuddle"
@@ -148,7 +147,7 @@ class Anime(commands.Cog):
         else:
             await i.response.send_message(f"No GIFs found for '{search_term}'", ephemeral=True)
 
-    @nextcord.slash_command(name="kill", description="Search for kill GIFs using Tenor API", guild_ids=[api.GuildID])
+    @nextcord.slash_command(name="kill", description="Search for kill GIFs using Tenor API")
     async def kill(self, i: nextcord.Interaction, member: nextcord.Member):
         # Define the search term for the hug command
         search_term = "Anime Kill wasted"
@@ -168,7 +167,7 @@ class Anime(commands.Cog):
         else:
             await i.response.send_message(f"No GIFs found for '{search_term}'", ephemeral=True)
 
-    @nextcord.slash_command(name="manipulate", description="Search for manipulate GIFs using Tenor API", guild_ids=[api.GuildID])
+    @nextcord.slash_command(name="manipulate", description="Search for manipulate GIFs using Tenor API")
     async def manipulate(self, i: nextcord.Interaction, member: nextcord.Member):
         # Define the search term for the hug command
         search_term = "Anime Manipulation"

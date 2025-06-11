@@ -1,7 +1,6 @@
 import nextcord
 from nextcord.ext import commands, application_checks
 import sqlite3
-import api as api
 from datetime import datetime, timedelta
 import os
 from dotenv import load_dotenv, dotenv_values
@@ -81,8 +80,7 @@ class Messages(commands.Cog):
 
     @nextcord.slash_command(
         name="messages",
-        description="See the amount of messages a user has sent!",
-        guild_ids=[api.GuildID]
+        description="See the amount of messages a user has sent!"
     )
     async def messages(self, i: nextcord.Interaction, member: nextcord.Member):
         cursor.execute(f"SELECT msg FROM msgstats WHERE user_id = ? AND guild_id = ?", (member.id, i.guild_id))
@@ -106,8 +104,7 @@ class Messages(commands.Cog):
 
     @nextcord.slash_command(
         name="messages7days",
-        description="See the amount of messages a user has sent in the past 7 days!",
-        guild_ids=[api.GuildID]
+        description="See the amount of messages a user has sent in the past 7 days!"
     )
     async def messages7days(self, i: nextcord.Interaction, member: nextcord.Member):
         seven_days_ago = datetime.utcnow() - timedelta(days=7)

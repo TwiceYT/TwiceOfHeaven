@@ -1,6 +1,5 @@
 import nextcord
 from nextcord.ext import commands, application_checks
-import api as api
 import sqlite3
 import os
 from dotenv import load_dotenv, dotenv_values
@@ -20,8 +19,7 @@ class Economyled(commands.Cog):
         self.bot = bot
     @nextcord.slash_command(
         name="eco-led",
-        description="Check the economy leaderboard",
-        guild_ids=[api.GuildID]    
+        description="Check the economy leaderboard"
     )
     async def leaderboard(self, i: nextcord.Interaction):
         cursor.execute("""

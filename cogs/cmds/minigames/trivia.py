@@ -5,7 +5,6 @@ import html
 import random
 import asyncio
 import sqlite3
-import api
 import os
 from dotenv import load_dotenv, dotenv_values
 
@@ -52,8 +51,7 @@ class Trivia(commands.Cog):
 
     @nextcord.slash_command(
         name="trivia",
-        description="Have fun with some Trivia!!",
-        guild_ids=[api.GuildID]
+        description="Have fun with some Trivia!!"
     )
     async def trivia(self, i: nextcord.Interaction):
         self.answer_given = False  # Reset the flag for a new trivia question

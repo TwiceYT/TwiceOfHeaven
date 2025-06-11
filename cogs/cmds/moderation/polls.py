@@ -1,6 +1,5 @@
 import nextcord
 from nextcord.ext import commands, tasks, application_checks
-import api
 import sqlite3
 import datetime
 import os
@@ -62,8 +61,7 @@ class Poll(commands.Cog):
     @is_staff_or_admin()
     @nextcord.slash_command(
         name="poll",
-        description="Make a poll on the server.",
-        guild_ids=[api.GuildID]
+        description="Make a poll on the server."
     )
     async def create_poll(
         self,

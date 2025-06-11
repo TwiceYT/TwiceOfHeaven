@@ -1,6 +1,5 @@
 import nextcord
 from nextcord.ext import commands, application_checks
-import api
 import sqlite3
 import os
 from dotenv import load_dotenv
@@ -18,7 +17,10 @@ class SetupWelcome(commands.Cog):
         self.bot = bot
 
     @application_checks.has_permissions(administrator=True)
-    @nextcord.slash_command(name="setup_welcome", description="Set up a welcome channel")
+    @nextcord.slash_command(
+        name="setup_welcome", 
+        description="Set up a welcome channel"
+    )
     async def setup_welcome_channel(self, interaction: nextcord.Interaction, welcome_channel: nextcord.TextChannel = None, on_join_role: nextcord.Role = None, leave_channel: nextcord.TextChannel = None):
         # Use `NULL` to represent no channel or role set
         welcome_channel_id = welcome_channel.id if welcome_channel else None
@@ -40,7 +42,10 @@ class SetupLogs(commands.Cog):
         self.bot = bot
 
     @application_checks.has_permissions(administrator=True)
-    @nextcord.slash_command(name="setup_logs", description="Setup the logs for the server!", guild_ids=[api.GuildID])
+    @nextcord.slash_command(
+        name="setup_logs", 
+        description="Setup the logs for the server!"
+    )
     async def logssetup(self, interaction: nextcord.Interaction, modlogs: nextcord.TextChannel = None, serverlogs: nextcord.TextChannel = None, ticketlogs: nextcord.TextChannel = None):
         # Use `NULL` to represent no log channel set
         modlogs_id = modlogs.id if modlogs else None
@@ -60,7 +65,10 @@ class SetupStats(commands.Cog):
         self.bot = bot
 
     @application_checks.has_permissions(administrator=True)
-    @nextcord.slash_command(name="setup_verify", description="Setup channels like Unverified Stats with a specific verify role!", guild_ids=[api.GuildID])
+    @nextcord.slash_command(
+        name="setup_verify", 
+        description="Setup channels like Unverified Stats with a specific verify role!"
+    )
     async def verified(self, interaction: nextcord.Interaction, verifyrole: nextcord.Role = None, unverified_channel: nextcord.VoiceChannel = None):
         # Use `NULL` to represent no verify role or channel set
         verifyrole_id = verifyrole.id if verifyrole else None
@@ -76,7 +84,10 @@ class SetupStats(commands.Cog):
 
 
     @application_checks.has_permissions(administrator=True)
-    @nextcord.slash_command(name="setup_statschannels", description="Setup stats-channels like rolecounts & membercount showing as a number on a voice channel! ", guild_ids=[api.GuildID])
+    @nextcord.slash_command(
+        name="setup_statschannels", 
+        description="Setup stats-channels like rolecounts & membercount showing as a number on a voice channel! "
+    )
     async def statschannels(self, interaction: nextcord.Interaction, membercount: nextcord.VoiceChannel = None, rolecount: nextcord.VoiceChannel = None):
         # Use `NULL` to represent no stats channels set
         membercount_id = membercount.id if membercount else None
@@ -99,8 +110,7 @@ class SetupSupport(commands.Cog):
     @application_checks.has_permissions(administrator=True)
     @nextcord.slash_command(
         name="setup_support",
-        description="Setup the support feature enabling support-tickets!",
-        guild_ids=[api.GuildID]
+        description="Setup the support feature enabling support-tickets!"
     )
     async def support(self, i: nextcord.Interaction, ticketstaff: nextcord.Role = None, ticketlogs: nextcord.TextChannel = None, ticket_category: nextcord.CategoryChannel = None):
         ticketstaff.id = ticketstaff.id if ticketstaff else None
@@ -119,8 +129,7 @@ class SetupStaffnBirthday(commands.Cog):
     @application_checks.has_permissions(administrator=True)
     @nextcord.slash_command(
         name="setup_staff",
-        description="Setup a specific staff role who can see tickets and do smaller moderation tasks!",
-        guild_ids=[api.GuildID]
+        description="Setup a specific staff role who can see tickets and do smaller moderation tasks!"
     )
     async def staffsetup(self, i: nextcord.Interaction, staffrole: nextcord.Role = None):
         staffrole.id = staffrole.id if staffrole else None
@@ -131,8 +140,7 @@ class SetupStaffnBirthday(commands.Cog):
     @application_checks.has_permissions(administrator=True)
     @nextcord.slash_command(
         name="setup_birthday",
-        description="Setup a birthday channel where users get pinged on their birthday!",
-        guild_ids=[api.GuildID]
+        description="Setup a birthday channel where users get pinged on their birthday!"
     )
     async def birthdaysetup(self, i: nextcord.Interaction, birthdaychannel: nextcord.TextChannel):
         birthdaychannel.id = birthdaychannel.id if birthdaychannel else None       
@@ -144,8 +152,7 @@ class SetupStaffnBirthday(commands.Cog):
     @application_checks.has_permissions(administrator=True)
     @nextcord.slash_command(
         name="setup_report",
-        description="Setup a report channel where users get report other members!",
-        guild_ids=[api.GuildID]
+        description="Setup a report channel where users get report other members!"
     )
     async def birthdaysetup(self, i: nextcord.Interaction, reportchannel: nextcord.TextChannel):
         reportchannel.id = reportchannel.id if reportchannel else None       

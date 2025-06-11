@@ -1,6 +1,5 @@
 import nextcord
 from nextcord.ext import commands, application_checks
-import api
 import sqlite3
 import os
 from dotenv import load_dotenv, dotenv_values
@@ -113,8 +112,7 @@ class BugReport(commands.Cog):
 
     @nextcord.slash_command(
         name="bot-bugreport",
-        description="Report any bugs you are experiencing to the Bot-Developer of the bot",
-        guild_ids=[api.GuildID]
+        description="Report any bugs you are experiencing to the Bot-Developer of the bot"
     )
     async def bugreport(self, i: nextcord.Interaction):
         modal = BugReportModal(closesbug_view=None)
@@ -184,8 +182,7 @@ class Report(commands.Cog):
 
     @nextcord.slash_command(
         name="report",
-        description="Report any bug user on the server",
-        guild_ids=[api.GuildID]
+        description="Report any bug user on the server"
     )
     async def report(self, i: nextcord.Interaction):
         modal = ReportModal(closesrep_view=None)

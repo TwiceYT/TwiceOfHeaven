@@ -2,7 +2,6 @@ import nextcord
 from nextcord.ext import commands
 import sqlite3
 from datetime import datetime
-import api
 from dotenv import load_dotenv
 import os
 

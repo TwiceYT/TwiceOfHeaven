@@ -4,7 +4,6 @@ import os
 import asyncio
 import sqlite3
 from dotenv import load_dotenv
-import api
 
 # Load environment variables
 load_dotenv(dotenv_path='config/config.env')
@@ -135,8 +134,13 @@ class Support(commands.Cog):
         view = CreateSupportButton(guild_id=ctx.guild.id)
         await ctx.send("Click the button below to create a Support-Ticket:", view=view)
 
+
+
     @application_checks.has_guild_permissions(administrator=True)
-    @nextcord.slash_command(name="support", description="Create a Support-Ticket", guild_ids=[api.GuildID])
+    @nextcord.slash_command(
+        name="support", 
+        description="Create a Support-Ticket"
+        )
     async def support(self, interaction: nextcord.Interaction):
         STAFF_ROLE_ID = get_staffID(interaction.guild.id)
         TICKET_SUPPORT_ID = get_ticketsupportID(interaction.guild.id)

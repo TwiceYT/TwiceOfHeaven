@@ -1,7 +1,5 @@
 import nextcord
 from nextcord.ext import commands, application_checks
-import sqlite3
-import api as api
 import datetime
 
 intents = nextcord.Intents.all()
@@ -20,8 +18,7 @@ class UpTime(commands.Cog):
 
     @nextcord.slash_command(
         name="uptime",
-        description="Show how long the bot has been online",
-        guild_ids=[api.GuildID]
+        description="Show how long the bot has been online"
     )
     async def uptime(self, i: nextcord.Interaction):
         uptime_delta = datetime.datetime.utcnow() - start_time

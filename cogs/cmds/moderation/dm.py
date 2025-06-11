@@ -1,6 +1,5 @@
 import nextcord
 from nextcord.ext import commands, application_checks
-import api as api
 
 intents = nextcord.Intents.all()
 
@@ -20,8 +19,7 @@ class DM(commands.Cog):
     @application_checks.has_guild_permissions(administrator=True)
     @nextcord.slash_command(
     name="dm_embed",
-    description="Send a message to a user",
-    guild_ids=[api.GuildID]
+    description="Send a message to a user"
     )
     async def embeddm(self, i: nextcord.Interaction, user: nextcord.Member, *, field1:str=None ,title="", embed_color: int = 0x3498db):
         try:
@@ -53,8 +51,7 @@ class DM(commands.Cog):
     @application_checks.has_guild_permissions(administrator=True)
     @nextcord.slash_command(
     name="dm",
-    description="Send a message to a user",
-    guild_ids=[api.GuildID]
+    description="Send a message to a user"
     )
     async def dm(self, i: nextcord.Interaction, user: nextcord.Member, *, message:str=None ):
         try:

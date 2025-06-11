@@ -2,7 +2,6 @@ import nextcord
 from nextcord.ext import commands
 import yt_dlp
 import os
-import api
 
 # Set up intents and the bot
 intents = nextcord.Intents.default()
@@ -24,7 +23,6 @@ class Mp3Conv(commands.Cog):
     @nextcord.slash_command(
         name="mp3",
         description="Convert any YouTube link to an MP3 file",
-        guild_ids=[api.GuildID]
     )
     async def convert(self, i: nextcord.Interaction, yturl: str):
         await i.response.send_message("Starting download... Large files can take a while... Please be patient!",)

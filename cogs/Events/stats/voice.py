@@ -4,7 +4,6 @@ from datetime import datetime, timedelta
 import sqlite3
 from dotenv import load_dotenv
 import os
-import api
 
 # Database file
 load_dotenv(dotenv_path='config/config.env')
@@ -50,8 +49,7 @@ class Voice(commands.Cog):
 
     @nextcord.slash_command(
         name="voice",
-        description="Fetch how long a user has been in voice channels in total",
-        guild_ids=[api.GuildID]
+        description="Fetch how long a user has been in voice channels in total"
     )
     async def voice(self, i: nextcord.Interaction, member: nextcord.Member):
         cursor.execute("SELECT total FROM voicestat WHERE user_id=? AND guild_id = ?", (member.id, i.guild.id,))

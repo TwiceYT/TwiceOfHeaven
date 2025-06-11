@@ -8,7 +8,6 @@ from dotenv import load_dotenv
 from PIL import Image, ImageDraw, ImageFont
 import requests
 import io
-import api
 
 # Database file
 load_dotenv(dotenv_path='config/config.env')

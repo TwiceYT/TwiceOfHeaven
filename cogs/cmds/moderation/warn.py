@@ -1,7 +1,6 @@
 import nextcord
 from nextcord.ext import commands, application_checks
 from datetime import datetime
-import api as api
 import sqlite3
 import os
 from dotenv import load_dotenv, dotenv_values
@@ -97,8 +96,7 @@ class Warn(commands.Cog):
     @is_staff_or_admin()
     @nextcord.slash_command(
         name="warn",
-        description="Warn a user",
-        guild_ids=[api.GuildID]
+        description="Warn a user"
     )
     async def warn(self, i: nextcord.Interaction, member: nextcord.Member, reason: str = "No reason specified."):
         guild_id = i.guild.id
@@ -158,8 +156,7 @@ class Warn(commands.Cog):
 
     @nextcord.slash_command(
         name="delwarn",
-        description="Remove warnings from a user",
-        guild_ids=[api.GuildID]
+        description="Remove warnings from a user"
     )
     async def unwarn(self, i: nextcord.Interaction, member: nextcord.Member, num_warnings: int = 1):
         guild_id = i.guild.id
@@ -236,8 +233,7 @@ class Warn(commands.Cog):
 
     @nextcord.slash_command(
         name="warnings",
-        description="See the amount of warnings the user has",
-        guild_ids=[api.GuildID]
+        description="See the amount of warnings the user has"
     )
     async def warnings(self, i: nextcord.Interaction, member: nextcord.Member):
         guild_id = i.guild.id

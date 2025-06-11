@@ -1,6 +1,5 @@
 import nextcord
 from nextcord.ext import commands
-import api
 import random
 import sqlite3
 import os
@@ -21,8 +20,7 @@ class Guess(commands.Cog):
 
     @nextcord.slash_command(
         name="guess_nr",
-        description="Guess a number game!",
-        guild_ids=[api.GuildID]
+        description="Guess a number game!"
     )
     async def guess(self, i: nextcord.Interaction):
         secret_number = random.randint(1, 100)

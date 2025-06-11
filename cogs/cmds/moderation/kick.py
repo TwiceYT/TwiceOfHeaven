@@ -1,6 +1,5 @@
 import nextcord
 from nextcord.ext import commands, application_checks
-import api
 import sqlite3
 import os
 from dotenv import load_dotenv, dotenv_values
@@ -32,8 +31,7 @@ class kick(commands.Cog):
     @application_checks.has_guild_permissions(kick_members=True)    
     @nextcord.slash_command(
             name="kick",
-            description="Kick a user from the server.",
-            guild_ids=[api.GuildID]
+            description="Kick a user from the server."
     )
     async def kick(self, i: nextcord.Interaction, member: nextcord.Member, reason: str = "No reason specified."):
         print(f"{member.name} got kicked by {i.user.name}")

@@ -1,6 +1,5 @@
 import nextcord
 from nextcord.ext import commands, application_checks
-import api
 import sqlite3
 import os
 from dotenv import load_dotenv, dotenv_values
@@ -22,8 +21,7 @@ class supportserver(commands.Cog):
 
     @nextcord.slash_command(
         name="bot_server",
-        description="Fetch an invite to the bots original support server!",
-        guild_ids=[api.GuildID]
+        description="Fetch an invite to the bots original support server!"
     )
     async def supserv(self, i: nextcord.Interaction):
         await i.response.send_message(Invite)

@@ -1,6 +1,5 @@
 import nextcord
 from nextcord.ext import commands
-import api as api
 import sqlite3
 import os
 from dotenv import load_dotenv, dotenv_values
@@ -21,8 +20,7 @@ class Pay(commands.Cog):
 
     @nextcord.slash_command(
         name="pay",
-        description="Pay another user money!",
-        guild_ids=[api.GuildID]
+        description="Pay another user money!"
     )
     async def pay(self, i: nextcord.Interaction, member: nextcord.Member, amount: int = 1):
         cursor.execute("SELECT bank FROM economy WHERE user_id = ? AND guild_id = ?", (i.user.id, i.guild_id,))

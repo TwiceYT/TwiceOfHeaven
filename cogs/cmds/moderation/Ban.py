@@ -1,6 +1,5 @@
 import nextcord
 from nextcord.ext import commands, application_checks
-import api
 import sqlite3
 from datetime import datetime
 import os
@@ -42,8 +41,7 @@ class Ban(commands.Cog):
     @application_checks.has_guild_permissions(ban_members=True)    
     @nextcord.slash_command(
         name="ban",
-        description="Bans a user from the server.",
-        guild_ids=[api.GuildID]
+        description="Bans a user from the server."
     )
     async def ban(self, i: nextcord.Interaction, member: nextcord.Member, reason: str = "No reason specified."):
         banlogID = get_banlog_channel(i)
@@ -103,8 +101,7 @@ class Ban(commands.Cog):
     @application_checks.has_guild_permissions(ban_members=True)
     @nextcord.slash_command(
         name="unban",
-        description="unbans a user for the guild.",
-        guild_ids=[api.GuildID]
+        description="unbans a user for the guild."
     )
     async def unban(self, i: nextcord.Interaction, member: nextcord.Member, reason: str = "No reason specified."):
         try:
@@ -150,8 +147,7 @@ class Ban(commands.Cog):
     @application_checks.has_guild_permissions(ban_members=True) 
     @nextcord.slash_command(
         name="banlist",
-        description="Displays all information of every banned user",
-        guild_ids=[api.GuildID]
+        description="Displays all information of every banned user"
     )
     async def banlist(self, i: nextcord.Interaction):
         cursor.execute("SELECT * FROM bans WHERE guild_id = ?", (i.guild.id,))

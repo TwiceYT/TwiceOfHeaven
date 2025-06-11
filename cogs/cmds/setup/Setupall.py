@@ -1,6 +1,5 @@
 import nextcord
 from nextcord.ext import commands, application_checks
-import api
 import sqlite3
 import os
 from dotenv import load_dotenv, dotenv_values
@@ -22,8 +21,7 @@ class SetupAll(commands.Cog):
     @application_checks.has_permissions(administrator=True)
     @nextcord.slash_command(
         name="setupall",
-        description="Setup every channel of the bot",
-        guild_ids=[api.GuildID]
+        description="Setup every channel of the bot"
     )
     async def setup(self, i: nextcord.Interaction):
         guild = i.guild

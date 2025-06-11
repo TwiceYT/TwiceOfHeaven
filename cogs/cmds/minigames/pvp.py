@@ -1,7 +1,6 @@
 import nextcord
 from nextcord.ext import commands
 import sqlite3
-import api
 import random
 import time
 import os
@@ -59,8 +58,7 @@ class PvP(commands.Cog):
 
     @nextcord.slash_command(
         name="pvpjoin",
-        description="Join a pvp game!",
-        guild_ids=[api.GuildID]
+        description="Join a pvp game!"
     )
     async def join(self, i: nextcord.Interaction):
         player_instance = Player(i.user)
@@ -69,8 +67,7 @@ class PvP(commands.Cog):
 
     @nextcord.slash_command(
         name="pvpleave",
-        description="Leave the pvp arena!",
-        guild_ids=[api.GuildID]
+        description="Leave the pvp arena!"
     )
     async def leave(self, i: nextcord.Interaction):
         player_instance = self.get_player(i.user)  # Use 'self' to reference the instance of the class
@@ -82,8 +79,7 @@ class PvP(commands.Cog):
 
     @nextcord.slash_command(
         name="pvp_attack",
-        description="Attack another member that is in the arena!",
-        guild_ids=[api.GuildID]
+        description="Attack another member that is in the arena!"
     )
     async def attack(self, i: nextcord.Interaction, target: nextcord.Member):
         attacker = self.get_player(i.user)

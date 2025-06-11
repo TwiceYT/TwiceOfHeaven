@@ -1,6 +1,5 @@
 import nextcord
 from nextcord.ext import commands, application_checks
-import api
 import sqlite3
 import asyncio
 import random
@@ -52,8 +51,7 @@ class Giveaway(commands.Cog):
     @is_staff_or_admin()
     @nextcord.slash_command(
         name="giveaway",
-        description="Create your own giveaway",
-        guild_ids=[api.GuildID]
+        description="Create your own giveaway"
     )
     async def giveaway(self, interaction: nextcord.Interaction, duration: int, prize: str, requirements: str):
         # Convert duration from hours to seconds

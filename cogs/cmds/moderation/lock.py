@@ -1,6 +1,5 @@
 import nextcord
 from nextcord.ext import commands, application_checks
-import api
 import sqlite3
 
 intents = nextcord.Intents.all()
@@ -68,8 +67,7 @@ class Lock(commands.Cog):
     @is_staff_or_admin()
     @nextcord.slash_command(
         name="lock",
-        description="Lock the channel",
-        guild_ids=[api.GuildID]
+        description="Lock the channel"
     )
     async def lock(self, i: nextcord.Interaction):
         # Check if the command is used in a guild
@@ -132,8 +130,7 @@ class Lock(commands.Cog):
     @is_staff_or_admin()
     @nextcord.slash_command(
         name="unlock",
-        description="Unlock the channel",
-        guild_ids=[api.GuildID] 
+        description="Unlock the channel"
     )
     async def unlock(self, i: nextcord.Interaction):
         # Check if the command is used in a guild

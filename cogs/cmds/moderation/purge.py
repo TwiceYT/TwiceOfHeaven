@@ -1,6 +1,5 @@
 import nextcord, asyncio
 from nextcord.ext import commands, application_checks
-import api
 import sqlite3
 import os
 import os
@@ -30,8 +29,7 @@ class Purge(commands.Cog):
     @application_checks.has_guild_permissions(manage_messages=True)
     @nextcord.slash_command(
         name="purge",
-        description="Purge a specified amount of messages",
-        guild_ids=[api.GuildID]
+        description="Purge a specified amount of messages"
     )
     async def purge(self, i: nextcord.Interaction, amount: int = nextcord.SlashOption(name="amount", description="The amount of messages to purge.", required=True)):
         await i.response.defer()

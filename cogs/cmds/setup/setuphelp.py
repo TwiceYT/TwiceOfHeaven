@@ -1,6 +1,5 @@
 import nextcord
 from nextcord.ext import commands, application_checks
-import api
 import sqlite3
 import os
 from dotenv import load_dotenv, dotenv_values
@@ -22,8 +21,7 @@ class HelpSetup(commands.Cog):
 
     @nextcord.slash_command(
         name="setup_info",
-        description="Help commands",
-        guild_ids=[api.GuildID]
+        description="Help commands"
     )   
     async def helpsetup(self, i: nextcord.Interaction):
         embed = nextcord.Embed(
@@ -127,8 +125,7 @@ class HelpSetup(commands.Cog):
 
     @nextcord.slash_command(
         name="setup_help",
-        description="Commands and information about the setup!",
-        guild_ids=[api.GuildID]
+        description="Commands and information about the setup!"
     )
     async def setuphelp(self, i: nextcord.Interaction):
         embed = nextcord.Embed(
