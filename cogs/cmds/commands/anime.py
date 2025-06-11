@@ -83,7 +83,7 @@ class Anime(commands.Cog):
             embed.set_author(name="", icon_url=i.user.avatar.url)
             await i.response.send_message(embed=embed)
         else:
-            await i.response.send_message(f"No GIFs found for '{search_term}'")
+            await i.response.send_message(f"No GIFs found for '{search_term}'", ephemeral=True)
 
 
     @nextcord.slash_command(name="slap", description="Search for slap GIFs using Tenor API", guild_ids=[api.GuildID])
@@ -104,7 +104,7 @@ class Anime(commands.Cog):
             embed.set_author(name="", icon_url=i.user.avatar.url)
             await i.response.send_message(embed=embed)
         else:
-            await i.response.send_message(f"No GIFs found for '{search_term}'")
+            await i.response.send_message(f"No GIFs found for '{search_term}'", ephemeral=True)
 
 
     @nextcord.slash_command(name="pat", description="Search for pat GIFs using Tenor API", guild_ids=[api.GuildID])
@@ -125,7 +125,7 @@ class Anime(commands.Cog):
             embed.set_author(name="", icon_url=i.user.avatar.url)
             await i.response.send_message(embed=embed)
         else:
-            await i.response.send_message(f"No GIFs found for '{search_term}'")
+            await i.response.send_message(f"No GIFs found for '{search_term}'", ephemeral=True)
 
 
     @nextcord.slash_command(name="cuddle", description="Search for cuddle GIFs using Tenor API", guild_ids=[api.GuildID])
@@ -146,7 +146,7 @@ class Anime(commands.Cog):
             embed.set_author(name="", icon_url=i.user.avatar.url)
             await i.response.send_message(embed=embed)
         else:
-            await i.response.send_message(f"No GIFs found for '{search_term}'")
+            await i.response.send_message(f"No GIFs found for '{search_term}'", ephemeral=True)
 
     @nextcord.slash_command(name="kill", description="Search for kill GIFs using Tenor API", guild_ids=[api.GuildID])
     async def kill(self, i: nextcord.Interaction, member: nextcord.Member):
@@ -166,7 +166,7 @@ class Anime(commands.Cog):
             embed.set_author(name="", icon_url=i.user.avatar.url)
             await i.response.send_message(embed=embed)
         else:
-            await i.response.send_message(f"No GIFs found for '{search_term}'")
+            await i.response.send_message(f"No GIFs found for '{search_term}'", ephemeral=True)
 
     @nextcord.slash_command(name="manipulate", description="Search for manipulate GIFs using Tenor API", guild_ids=[api.GuildID])
     async def manipulate(self, i: nextcord.Interaction, member: nextcord.Member):
@@ -186,7 +186,7 @@ class Anime(commands.Cog):
             embed.set_author(name="", icon_url=i.user.avatar.url)
             await i.response.send_message(embed=embed)
         else:
-            await i.response.send_message(f"No GIFs found for '{search_term}'")
+            await i.response.send_message(f"No GIFs found for '{search_term}'", ephemeral=True)
 
             
         

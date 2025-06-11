@@ -2,7 +2,8 @@ import nextcord
 from nextcord.ext import commands
 import yt_dlp as youtube_dl
 from datetime import datetime
-import api
+from dotenv import load_dotenv, dotenv_values
+import os
 
 class MusicQueue:
     def __init__(self):
@@ -39,7 +40,7 @@ class Music(commands.Cog):
         self.bot = bot
         self.is_playing = False
 
-    @nextcord.slash_command(name="play", description="Play a song from YouTube.")
+    @nextcord.slash_command(name="play", description="Play a song from YouTube. Won't add to queue, will play immediately.")
     async def play(self, interaction: nextcord.Interaction, url: str):
         await interaction.response.defer()
 
@@ -78,14 +79,19 @@ class Music(commands.Cog):
             with youtube_dl.YoutubeDL(ydl_opts) as ydl:
                 info = ydl.extract_info(search_query, download=False)
                 print("Extracted Info:", info)
-                
-                if 'entries' in info and len(info['entries']) > 0:
+
+                if info is None:
+                    await self.safe_send_message(interaction, "Kunde inte hämta information från YouTube. Videon kan vara begränsad eller kräva inloggning.")
+                    return
+
+                if 'entries' in info and info['entries']:
                     entry = info['entries'][0]
                 elif 'url' in info:
                     entry = info
                 else:
-                    await self.safe_send_message(interaction, "No results found.")
+                    await self.safe_send_message(interaction, "Inga resultat hittades.")
                     return
+
 
                 song = {
                     'url': entry['url'],
@@ -102,6 +108,83 @@ class Music(commands.Cog):
         except Exception as e:
             await self.safe_send_message(interaction, f"An error occurred: {str(e)}")
             print(f"Error details: {e}")
+
+
+
+
+
+    # @nextcord.slash_command(name="addtoqueue", description="Add a song to the queue without starting playback.")
+    # async def addtoqueue(self, interaction: nextcord.Interaction, url: str):
+    #     await interaction.response.defer()
+
+    #     if interaction.user.voice is None:
+    #         await self.safe_send_message(interaction, "You need to be in a voice channel to use this command.")
+    #         return
+
+    #     if "spotify.com" in url:
+    #         await self.safe_send_message(interaction, "Please use a YouTube link instead of a Spotify link.")
+    #         return
+
+    #     ydl_opts = {
+    #         'format': 'bestaudio/best',
+    #         'postprocessors': [{
+    #             'key': 'FFmpegExtractAudio',
+    #             'preferredcodec': 'mp3',
+    #             'preferredquality': '320',
+    #         }],
+    #         'default_search': 'ytsearch',
+    #         'noplaylist': True,
+    #         'ignoreerrors': True,
+    #         'extractaudio': True,
+    #         'skip_download': True,
+    #         'simulate': True,
+    #         'quiet': True,
+    #         'no_warnings': True,
+    #         'no_color': True,
+    #         'cookiefile': 'cookies.txt',  # Rekommenderas om yt-dlp inte hittar låtar
+    #     }
+
+    #     try:
+    #         search_query = url if ("youtu.be" in url or "youtube.com" in url) else url
+
+    #         with youtube_dl.YoutubeDL(ydl_opts) as ydl:
+    #             info = ydl.extract_info(search_query, download=False)
+    #             print("Extracted Info:", info)
+
+    #             if info is None:
+    #                 await self.safe_send_message(interaction, "Kunde inte hämta information från YouTube. Videon kan vara begränsad eller kräva inloggning.")
+    #                 return
+
+    #             if 'entries' in info and info['entries']:
+    #                 entry = info['entries'][0]
+    #             elif 'url' in info:
+    #                 entry = info
+    #             else:
+    #                 await self.safe_send_message(interaction, "Inga resultat hittades.")
+    #                 return
+
+    #             song = {
+    #                 'url': entry['url'],
+    #                 'title': entry['title'],
+    #                 'requester': interaction.user
+    #             }
+
+    #             music_queue.add_to_queue(interaction.guild.id, song)
+    #             await self.safe_send_message(interaction, f"Added to queue: {song['title']}")
+
+    #     except Exception as e:
+    #         await self.safe_send_message(interaction, f"Ett fel uppstod: {str(e)}")
+    #         print(f"Error details: {e}")
+
+
+
+
+
+
+
+
+
+
 
     @nextcord.slash_command(name="skip", description="Skip the currently playing song.")
     async def skip(self, interaction: nextcord.Interaction):
@@ -143,7 +226,7 @@ class Music(commands.Cog):
             await self.safe_send_message(interaction, "The queue is currently empty.")
 
 
-    @nextcord.slash_command(name="disconnect", description="Disconnects the bot and clears the current queue.", guild_ids=[api.GuildID])
+    @nextcord.slash_command(name="disconnect", description="Disconnects the bot and clears the current queue.")
     async def disconnect(self, interaction: nextcord.Interaction):
         if interaction.guild.voice_client:
             await interaction.guild.voice_client.disconnect()
@@ -202,3 +285,4 @@ class Music(commands.Cog):
 
 def setup(bot: commands.Bot):
     bot.add_cog(Music(bot))
+    print("Music Cog Registered")

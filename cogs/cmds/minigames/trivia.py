@@ -67,12 +67,12 @@ class Trivia(commands.Cog):
         for idx, answer in enumerate(answers, start=1):
             options += f"{idx}. {answer}\n"
 
-        await i.response.send_message(f"**Question:**\n{question}\n\n**Options:**\n{options}")
+        await i.response.send_message(f"**Question:**\n{question}\n\n**Options:**\n{options}\n\n Please respond wit the right number within 15 seconds!")
 
         try:
             guess_message = await self.bot.wait_for(
                 "message",
-                timeout=30.0,
+                timeout=15.0,
                 check=lambda m: m.author == i.user and m.channel == i.channel,
             )
 

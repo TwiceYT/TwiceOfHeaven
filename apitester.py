@@ -15,4 +15,4 @@ query = "Vampire"
 response = requests.get(f"https://api.genius.com/search?q={query}", headers=headers)
 
 print(response.status_code)  # Should return 200
-print(response.json())  # Check the response
+#print(response.json())  # Check the response
