@@ -6,7 +6,7 @@ import os
 from dotenv import load_dotenv, dotenv_values
 
 
-load_dotenv(dotenv_path='config\config.env')
+load_dotenv(dotenv_path='config/config.env')
 
 
 Prefix = os.getenv("Prefix")

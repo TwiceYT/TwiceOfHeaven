@@ -6,7 +6,7 @@ import os
 from dotenv import load_dotenv, dotenv_values
 
 # Database file
-load_dotenv(dotenv_path='config\config.env')
+load_dotenv(dotenv_path='config/config.env')
 DBFile = os.getenv("ATABASE_FILE")
 
 # Initialize the bot

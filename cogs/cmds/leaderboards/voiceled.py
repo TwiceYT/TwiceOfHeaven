@@ -5,17 +5,14 @@ import os
 from dotenv import load_dotenv, dotenv_values
 
 # Database file
-load_dotenv(dotenv_path='config\config.env')
+load_dotenv(dotenv_path='config/config.env')
 DBFile = os.getenv("DATABASE_FILE")
+BotID = os.getenv("BotID")
+
 database = sqlite3.connect(DBFile)
 cursor = database.cursor()
 
 intents = nextcord.Intents.all()
-
-#Load env file
-load_dotenv(dotenv_path='config\config.env')
-#Load custom Prefix
-BotID = os.getenv("BotID")
 
 class VoiceLed(commands.Cog):
     def __init__(self, bot: commands.Bot):
